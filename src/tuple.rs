@@ -4,8 +4,9 @@
 use crate::constants::EPSILON;
 
 use std::cmp::{Eq, PartialEq};
+use std::ops::{Add, Neg, Sub};
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Tuple {
     data: [f64; 4],
 }
@@ -72,3 +73,39 @@ impl PartialEq for Tuple {
 }
 
 impl Eq for Tuple {}
+
+impl Add for Tuple {
+    type Output = Self;
+
+    fn add(self, other: Self) -> Self {
+        let mut res = Self::zero_vector();
+        for i in 0..4 {
+            res.data[i] = self.data[i] + other.data[i];
+        }
+        res
+    }
+}
+
+impl Sub for Tuple {
+    type Output = Self;
+
+    fn sub(self, other: Self) -> Self::Output {
+        let mut res = Self::zero_vector();
+        for i in 0..4 {
+            res.data[i] = self.data[i] - other.data[i];
+        }
+        res
+    }
+}
+
+impl Neg for Tuple {
+    type Output = Self;
+
+    fn neg(self) -> Self::Output {
+        let mut res = Self::zero_vector();
+        for i in 0..4 {
+            res.data[i] = -self.data[i];
+        }
+        res
+    }
+}
