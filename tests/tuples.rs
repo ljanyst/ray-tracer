@@ -74,3 +74,23 @@ fn negate_tuple() {
     let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
     assert_eq!(-a, Tuple::new(-1.0, 2.0, -3.0, 4.0));
 }
+
+#[test]
+fn multiply_tuple_and_scalar() {
+    let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
+    assert_eq!(3.5 * a, Tuple::new(3.5, -7.0, 10.5, -14.0));
+    assert_eq!(a * 3.5, Tuple::new(3.5, -7.0, 10.5, -14.0));
+}
+
+#[test]
+fn multiply_tuple_by_fraction() {
+    let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
+    assert_eq!(0.5 * a, Tuple::new(0.5, -1.0, 1.5, -2.0));
+    assert_eq!(a * 0.5, Tuple::new(0.5, -1.0, 1.5, -2.0));
+}
+
+#[test]
+fn divide_tuple_by_scalar() {
+    let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
+    assert_eq!(a / 2.0, Tuple::new(0.5, -1.0, 1.5, -2.0));
+}
