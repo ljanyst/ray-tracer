@@ -33,3 +33,44 @@ fn create_vector() {
     let a = vector(4.0, -4.0, 3.0);
     assert_eq!(a, Tuple::new(4.0, -4.0, 3.0, 0.0));
 }
+
+#[test]
+fn add_vector_to_point() {
+    let a1 = point(3.0, -2.0, 5.0);
+    let a2 = vector(-2.0, 3.0, 1.0);
+    assert_eq!(a1 + a2, point(1.0, 1.0, 6.0));
+}
+
+#[test]
+fn subtract_two_points() {
+    let p1 = point(3.0, 2.0, 1.0);
+    let p2 = point(5.0, 6.0, 7.0);
+    assert_eq!(p1 - p2, vector(-2.0, -4.0, -6.0));
+}
+
+#[test]
+fn subtract_vector_from_point() {
+    let p = point(3.0, 2.0, 1.0);
+    let v = vector(5.0, 6.0, 7.0);
+    assert_eq!(p - v, point(-2.0, -4.0, -6.0));
+}
+
+#[test]
+fn subtract_two_vectors() {
+    let v1 = vector(3.0, 2.0, 1.0);
+    let v2 = vector(5.0, 6.0, 7.0);
+    assert_eq!(v1 - v2, vector(-2.0, -4.0, -6.0));
+}
+
+#[test]
+fn subtract_vector_from_zero_vector() {
+    let zero = vector(0.0, 0.0, 0.0);
+    let v = vector(1.0, -2.0, 3.0);
+    assert_eq!(zero - v, vector(-1.0, 2.0, -3.0));
+}
+
+#[test]
+fn negate_tuple() {
+    let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
+    assert_eq!(-a, Tuple::new(-1.0, 2.0, -3.0, 4.0));
+}
