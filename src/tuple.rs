@@ -4,7 +4,7 @@
 use crate::constants::EPSILON;
 
 use std::cmp::{Eq, PartialEq};
-use std::ops::{Add, Neg, Sub};
+use std::ops::{Add, Div, Mul, Neg, Sub};
 
 #[derive(Debug, Copy, Clone)]
 pub struct Tuple {
@@ -107,5 +107,38 @@ impl Neg for Tuple {
             res.data[i] = -self.data[i];
         }
         res
+    }
+}
+
+impl Mul<Tuple> for f64 {
+    type Output = Tuple;
+
+    fn mul(self, mut other: Tuple) -> Self::Output {
+        for i in 0..4 {
+            other.data[i] *= self;
+        }
+        other
+    }
+}
+
+impl Mul<f64> for Tuple {
+    type Output = Self;
+
+    fn mul(mut self, other: f64) -> Self::Output {
+        for i in 0..4 {
+            self.data[i] *= other;
+        }
+        self
+    }
+}
+
+impl Div<f64> for Tuple {
+    type Output = Self;
+
+    fn div(mut self, other: f64) -> Self::Output {
+        for i in 0..4 {
+            self.data[i] /= other;
+        }
+        self
     }
 }
