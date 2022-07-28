@@ -24,6 +24,10 @@ impl Tuple {
         }
     }
 
+    pub fn zero_color() -> Tuple {
+        Tuple::zero_vector()
+    }
+
     pub fn new(x: f64, y: f64, z: f64, w: f64) -> Tuple {
         Self { data: [x, y, z, w] }
     }
@@ -42,6 +46,18 @@ impl Tuple {
 
     pub fn w(&self) -> f64 {
         self.data[3]
+    }
+
+    pub fn r(&self) -> f64 {
+        self.data[0]
+    }
+
+    pub fn g(&self) -> f64 {
+        self.data[1]
+    }
+
+    pub fn b(&self) -> f64 {
+        self.data[2]
     }
 
     pub fn is_point(&self) -> bool {
@@ -84,6 +100,14 @@ impl Tuple {
         res.data[2] = self.x() * other.y() - self.y() * other.x();
         res
     }
+
+    pub fn hadamard(&self, other: &Tuple) -> Tuple {
+        let mut res = Tuple::zero_vector();
+        for i in 0..4 {
+            res.data[i] = self.data[i] * other.data[i];
+        }
+        res
+    }
 }
 
 pub fn point(x: f64, y: f64, z: f64) -> Tuple {
@@ -92,6 +116,10 @@ pub fn point(x: f64, y: f64, z: f64) -> Tuple {
 
 pub fn vector(x: f64, y: f64, z: f64) -> Tuple {
     Tuple::new(x, y, z, 0.0)
+}
+
+pub fn color(r: f64, g: f64, b: f64) -> Tuple {
+    vector(r, g, b)
 }
 
 impl PartialEq for Tuple {
