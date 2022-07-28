@@ -3,8 +3,6 @@
 
 use crate::tuple::{color, Tuple};
 
-use std::vec::Vec;
-
 pub struct Canvas {
     width: usize,
     height: usize,
@@ -56,4 +54,45 @@ impl Canvas {
         self.check_bounds(x, y);
         self.data[x][y]
     }
+
+    pub fn ppm(&self) -> String {
+        let mut ppm = String::new();
+        // Header
+        ppm.push_str("P3\n");
+        ppm.push_str(format!("{} {}\n", self.width, self.height).as_str());
+        ppm.push_str("255\n");
+
+        // Pixel data
+        for j in 0..self.height {
+            let mut row = String::new();
+            for i in 0..self.width {
+                let pixel = self.at(i, j);
+                ppm = add_pixel_data(ppm, &mut row, pixel.r());
+                ppm = add_pixel_data(ppm, &mut row, pixel.g());
+                ppm = add_pixel_data(ppm, &mut row, pixel.b());
+            }
+            if row.len() != 0 {
+                ppm.push_str(row.as_str());
+                ppm.push_str("\n");
+            }
+        }
+        ppm
+    }
+}
+
+fn add_pixel_data(mut ppm: String, row: &mut String, color: f64) -> String {
+    let c = format!("{}", (color * 256.0) as u8);
+
+    if row.len() + 1 + c.len() > 70 {
+        ppm.push_str(row.as_str());
+        ppm.push_str("\n");
+        row.clear();
+    }
+
+    if row.len() != 0 {
+        row.push_str(" ");
+    }
+    row.push_str(c.as_str());
+
+    ppm
 }
