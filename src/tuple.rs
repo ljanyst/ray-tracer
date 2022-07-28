@@ -51,6 +51,23 @@ impl Tuple {
     pub fn is_vector(&self) -> bool {
         self.data[3] == 0.0
     }
+
+    pub fn norm(&self) -> f64 {
+        let mut norm = 0.0;
+        for i in 0..4 {
+            norm += self.data[i] * self.data[i];
+        }
+        norm.sqrt()
+    }
+
+    pub fn normalized(&self) -> Tuple {
+        let norm = self.norm();
+        let mut n = *self;
+        for i in 0..4 {
+            n.data[i] /= norm
+        }
+        n
+    }
 }
 
 pub fn point(x: f64, y: f64, z: f64) -> Tuple {
