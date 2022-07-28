@@ -68,6 +68,22 @@ impl Tuple {
         }
         n
     }
+
+    pub fn dot(&self, other: &Tuple) -> f64 {
+        let mut res = 0.0_f64;
+        for i in 0..4 {
+            res += self.data[i] * other.data[i];
+        }
+        res
+    }
+
+    pub fn cross(&self, other: &Tuple) -> Tuple {
+        let mut res = Tuple::zero_vector();
+        res.data[0] = self.y() * other.z() - self.z() * other.y();
+        res.data[1] = self.z() * other.x() - self.x() * other.z();
+        res.data[2] = self.x() * other.y() - self.y() * other.x();
+        res
+    }
 }
 
 pub fn point(x: f64, y: f64, z: f64) -> Tuple {
