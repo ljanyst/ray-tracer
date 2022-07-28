@@ -118,3 +118,18 @@ fn normalize_vector() {
     assert_eq!(a.normalized(), vector(1.0 / s, 2.0 / s, 3.0 / s));
     assert!(feq(a.normalized().norm(), 1.0))
 }
+
+#[test]
+fn vector_dot_product() {
+    let a = vector(1.0, 2.0, 3.0);
+    let b = vector(2.0, 3.0, 4.0);
+    assert!(feq(a.dot(&b), 20.0))
+}
+
+#[test]
+fn vector_cross_product() {
+    let a = vector(1.0, 2.0, 3.0);
+    let b = vector(2.0, 3.0, 4.0);
+    assert_eq!(a.cross(&b), vector(-1.0, 2.0, -1.0));
+    assert_eq!(b.cross(&a), vector(1.0, -2.0, 1.0));
+}
