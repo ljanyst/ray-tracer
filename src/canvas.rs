@@ -3,6 +3,8 @@
 
 use crate::tuple::{color, Tuple};
 
+use std::fs;
+
 pub struct Canvas {
     width: usize,
     height: usize,
@@ -77,6 +79,11 @@ impl Canvas {
             }
         }
         ppm
+    }
+
+    pub fn save(&self, file_path: &str) -> std::io::Result<()> {
+        fs::write(file_path, self.ppm().as_bytes())?;
+        Ok(())
     }
 }
 
