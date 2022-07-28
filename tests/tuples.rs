@@ -1,4 +1,4 @@
-use ray_tracer::{point, vector, Tuple};
+use ray_tracer::{feq, point, vector, Tuple};
 
 #[test]
 fn tuple_point() {
@@ -93,4 +93,28 @@ fn multiply_tuple_by_fraction() {
 fn divide_tuple_by_scalar() {
     let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
     assert_eq!(a / 2.0, Tuple::new(0.5, -1.0, 1.5, -2.0));
+}
+
+#[test]
+fn vector_norm() {
+    let a = vector(1.0, 0.0, 0.0);
+    assert!(feq(a.norm(), 1.0));
+    let a = vector(0.0, 1.0, 0.0);
+    assert!(feq(a.norm(), 1.0));
+    let a = vector(0.0, 0.0, 1.0);
+    assert!(feq(a.norm(), 1.0));
+    let a = vector(1.0, 2.0, 3.0);
+    assert!(feq(a.norm(), 14.0_f64.sqrt()));
+    let a = vector(-1.0, -2.0, -3.0);
+    assert!(feq(a.norm(), 14.0_f64.sqrt()));
+}
+
+#[test]
+fn normalize_vector() {
+    let a = vector(4.0, 0.0, 0.0);
+    assert_eq!(a.normalized(), vector(1.0, 0.0, 0.0));
+    let a = vector(1.0, 2.0, 3.0);
+    let s = 14.0_f64.sqrt();
+    assert_eq!(a.normalized(), vector(1.0 / s, 2.0 / s, 3.0 / s));
+    assert!(feq(a.normalized().norm(), 1.0))
 }
