@@ -4,11 +4,13 @@
 pub use crate::canvas::*;
 pub use crate::constants::*;
 pub use crate::matrix::*;
+pub use crate::transformations::*;
 pub use crate::tuple::*;
 pub use crate::utils::*;
 
 pub mod canvas;
 pub mod constants;
 pub mod matrix;
+pub mod transformations;
 pub mod tuple;
 pub mod utils;
