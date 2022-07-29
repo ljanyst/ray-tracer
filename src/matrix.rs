@@ -116,6 +116,27 @@ impl Matrix {
         res
     }
 
+    pub fn inverted(&self) -> Matrix {
+        let d = self.det();
+        if d == 0.0 {
+            panic!("Matrix is not invertible {:?}", self);
+        }
+        let mut res = Matrix::zero();
+        res.size = self.size;
+
+        for i in 0..self.size {
+            for j in 0..self.size {
+                let c = self.cofactor(i, j);
+                res.data[idx(j, i)] = c / d;
+            }
+        }
+        res
+    }
+
+    pub fn is_invertible(&self) -> bool {
+        self.det() != 0.0
+    }
+
     pub fn det(&self) -> f64 {
         if self.size == 2 {
             return self.at(0, 0) * self.at(1, 1) - self.at(0, 1) * self.at(1, 0);
