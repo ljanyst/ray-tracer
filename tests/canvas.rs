@@ -79,7 +79,7 @@ fn split_ppm_lines() {
 
 #[test]
 fn ppm_ends_with_newline() {
-    let mut c = Canvas::new(5, 3);
+    let c = Canvas::new(5, 3);
     let ppm = c.ppm();
     assert_eq!(ppm.chars().last().unwrap(), '\n');
 }
