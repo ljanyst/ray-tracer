@@ -134,3 +134,95 @@ fn transpose_matrix() {
     );
     assert_eq!(m.transposed(), mt);
 }
+
+#[test]
+fn compute_determinant_2x2() {
+    let m = Matrix::new2(
+        1.0, 5.0, //
+        -3.0, 2.0, //
+    );
+    assert_eq!(m.det(), 17.0);
+}
+
+#[test]
+fn compute_determinant_3x3() {
+    let m = Matrix::new3(
+        1.0, 2.0, 6.0, //
+        -5.0, 8.0, -4.0, //
+        2.0, 6.0, 4.0, //
+    );
+    assert_eq!(m.cofactor(0, 0), 56.0);
+    assert_eq!(m.cofactor(0, 1), 12.0);
+    assert_eq!(m.cofactor(0, 2), -46.0);
+    assert_eq!(m.det(), -196.0);
+}
+
+#[test]
+fn compute_determinant_4x4() {
+    let m = Matrix::new(
+        -2.0, -8.0, 3.0, 5.0, //
+        -3.0, 1.0, 7.0, 3.0, //
+        1.0, 2.0, -9.0, 6.0, //
+        -6.0, 7.0, 7.0, -9.0, //
+    );
+    assert_eq!(m.cofactor(0, 0), 690.0);
+    assert_eq!(m.cofactor(0, 1), 447.0);
+    assert_eq!(m.cofactor(0, 2), 210.0);
+    assert_eq!(m.cofactor(0, 3), 51.0);
+    assert_eq!(m.det(), -4071.0);
+}
+
+#[test]
+fn get_submatrix_3x3() {
+    let m1 = Matrix::new3(
+        1.0, 5.0, 0.0, //
+        -3.0, 2.0, 7.0, //
+        0.0, 6.0, -3.0, //
+    );
+    let m2 = Matrix::new2(
+        -3.0, 2.0, //
+        0.0, 6.0, //
+    );
+    assert_eq!(m1.submatrix(0, 2), m2);
+}
+
+#[test]
+fn get_submatrix_4x4() {
+    let m1 = Matrix::new(
+        -6.0, 1.0, 1.0, 6.0, //
+        -8.0, 5.0, 8.0, 6.0, //
+        -1.0, 0.0, 8.0, 2.0, //
+        -7.0, 1.0, -1.0, 1.0, //
+    );
+    let m2 = Matrix::new3(
+        -6.0, 1.0, 6.0, //
+        -8.0, 8.0, 6.0, //
+        -7.0, -1.0, 1.0, //
+    );
+    assert_eq!(m1.submatrix(2, 1), m2);
+}
+
+#[test]
+fn compute_minor_3x3() {
+    let m = Matrix::new3(
+        3.0, 5.0, 0.0, //
+        2.0, -1.0, -7.0, //
+        6.0, -1.0, 5.0, //
+    );
+    let b = m.submatrix(1, 0);
+    assert_eq!(b.det(), 25.0);
+    assert_eq!(m.minor(1, 0), 25.0);
+}
+
+#[test]
+fn compute_cofactor_3x3() {
+    let m = Matrix::new3(
+        3.0, 5.0, 0.0, //
+        2.0, -1.0, -7.0, //
+        6.0, -1.0, 5.0, //
+    );
+    assert_eq!(m.minor(0, 0), -12.0);
+    assert_eq!(m.cofactor(0, 0), -12.0);
+    assert_eq!(m.minor(1, 0), 25.0);
+    assert_eq!(m.cofactor(1, 0), -25.0);
+}
