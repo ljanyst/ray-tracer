@@ -108,6 +108,14 @@ impl Tuple {
         }
         res
     }
+
+    pub fn set(&mut self, i: usize, v: f64) {
+        self.data[i] = v;
+    }
+
+    pub fn at(&self, i: usize) -> f64 {
+        self.data[i]
+    }
 }
 
 pub fn point(x: f64, y: f64, z: f64) -> Tuple {
