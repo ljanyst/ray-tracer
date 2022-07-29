@@ -84,9 +84,30 @@ impl Matrix {
         }
     }
 
+    pub fn one() -> Matrix {
+        Self {
+            data: [
+                1.0, 0.0, 0.0, 0.0, //
+                0.0, 1.0, 0.0, 0.0, //
+                0.0, 0.0, 1.0, 0.0, //
+                0.0, 0.0, 0.0, 1.0, //
+            ],
+        }
+    }
+
     pub fn at(&self, i: usize, j: usize) -> f64 {
         check_bounds(i, j);
         self.data[idx(i, j)]
+    }
+
+    pub fn transposed(&self) -> Matrix {
+        let mut res = Matrix::zero();
+        for i in 0..4 {
+            for j in 0..4 {
+                res.data[idx(j, i)] = self.data[idx(i, j)];
+            }
+        }
+        res
     }
 }
 
