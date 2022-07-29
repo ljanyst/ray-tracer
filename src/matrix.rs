@@ -106,6 +106,11 @@ impl Matrix {
         self.data[idx(i, j)]
     }
 
+    pub fn set(&mut self, i: usize, j: usize, v: f64) {
+        check_bounds(i, j, self.size);
+        self.data[idx(i, j)] = v;
+    }
+
     pub fn transposed(&self) -> Matrix {
         let mut res = Matrix::zero();
         for i in 0..4 {
