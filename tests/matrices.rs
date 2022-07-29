@@ -100,3 +100,37 @@ fn multiply_matrix_by_tuple() {
     let t2 = Tuple::new(18.0, 24.0, 33.0, 1.0);
     assert_eq!(m * t1, t2);
 }
+
+#[test]
+fn multiply_matrix_by_identity_matrix() {
+    let m = Matrix::new(
+        0.0, 1.0, 2.0, 4.0, //
+        1.0, 2.0, 4.0, 8.0, //
+        2.0, 4.0, 8.0, 16.0, //
+        4.0, 8.0, 16.0, 32.0, //
+    );
+    assert_eq!(m * Matrix::one(), m);
+}
+
+#[test]
+fn multiply_identitn_matrix_by_tuple() {
+    let t = Tuple::new(1.0, 2.0, 3.0, 4.0);
+    assert_eq!(Matrix::one() * t, t);
+}
+
+#[test]
+fn transpose_matrix() {
+    let m = Matrix::new(
+        0.0, 9.0, 3.0, 0.0, //
+        9.0, 8.0, 0.0, 8.0, //
+        1.0, 8.0, 5.0, 3.0, //
+        0.0, 0.0, 5.0, 8.0, //
+    );
+    let mt = Matrix::new(
+        0.0, 9.0, 1.0, 0.0, //
+        9.0, 8.0, 8.0, 0.0, //
+        3.0, 0.0, 5.0, 5.0, //
+        0.0, 8.0, 3.0, 8.0, //
+    );
+    assert_eq!(m.transposed(), mt);
+}
