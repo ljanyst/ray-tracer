@@ -2,8 +2,10 @@
 // Licensed under the MIT license, see the LICENSE file for details.
 
 use crate::constants::EPSILON;
+use crate::tuple::Tuple;
 
 use std::cmp::{Eq, PartialEq};
+use std::ops::Mul;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Matrix {
@@ -71,6 +73,17 @@ impl Matrix {
         }
     }
 
+    pub fn zero() -> Matrix {
+        Self {
+            data: [
+                0.0, 0.0, 0.0, 0.0, //
+                0.0, 0.0, 0.0, 0.0, //
+                0.0, 0.0, 0.0, 0.0, //
+                0.0, 0.0, 0.0, 0.0, //
+            ],
+        }
+    }
+
     pub fn at(&self, i: usize, j: usize) -> f64 {
         check_bounds(i, j);
         self.data[idx(i, j)]
@@ -102,3 +115,35 @@ impl PartialEq for Matrix {
 }
 
 impl Eq for Matrix {}
+
+impl Mul for Matrix {
+    type Output = Matrix;
+
+    fn mul(self, other: Matrix) -> Self::Output {
+        let mut res = Matrix::zero();
+        for i in 0..4 {
+            for j in 0..4 {
+                for k in 0..4 {
+                    res.data[idx(i, j)] += self.data[idx(i, k)] * other.data[idx(k, j)]
+                }
+            }
+        }
+        res
+    }
+}
+
+impl Mul<Tuple> for Matrix {
+    type Output = Tuple;
+
+    fn mul(self, other: Tuple) -> Self::Output {
+        let mut res = Tuple::zero_vector();
+        for i in 0..4 {
+            let mut v = 0.0_f64;
+            for j in 0..4 {
+                v += self.data[idx(i, j)] * other.at(j)
+            }
+            res.set(i, v);
+        }
+        res
+    }
+}
