@@ -1,4 +1,4 @@
-use ray_tracer::Matrix;
+use ray_tracer::{Matrix, Tuple};
 
 #[test]
 fn create_matrix() {
@@ -63,4 +63,40 @@ fn compare_matrix() {
     );
     assert_eq!(m1, m2);
     assert_ne!(m1, m3);
+}
+
+#[test]
+fn multiply_two_matrices() {
+    let m1 = Matrix::new(
+        1.0, 2.0, 3.0, 4.0, //
+        5.0, 6.0, 7.0, 8.0, //
+        9.0, 8.0, 7.0, 6.0, //
+        5.0, 4.0, 3.0, 2.0, //
+    );
+    let m2 = Matrix::new(
+        -2.0, 1.0, 2.0, 3.0, //
+        3.0, 2.0, 1.0, -1.0, //
+        4.0, 3.0, 6.0, 5.0, //
+        1.0, 2.0, 7.0, 8.0, //
+    );
+    let m3 = Matrix::new(
+        20.0, 22.0, 50.0, 48.0, //
+        44.0, 54.0, 114.0, 108.0, //
+        40.0, 58.0, 110.0, 102.0, //
+        16.0, 26.0, 46.0, 42.0, //
+    );
+    assert_eq!(m1 * m2, m3);
+}
+
+#[test]
+fn multiply_matrix_by_tuple() {
+    let m = Matrix::new(
+        1.0, 2.0, 3.0, 4.0, //
+        2.0, 4.0, 4.0, 2.0, //
+        8.0, 6.0, 4.0, 1.0, //
+        0.0, 0.0, 0.0, 1.0, //
+    );
+    let t1 = Tuple::new(1.0, 2.0, 3.0, 1.0);
+    let t2 = Tuple::new(18.0, 24.0, 33.0, 1.0);
+    assert_eq!(m * t1, t2);
 }
