@@ -6,10 +6,10 @@ fn intersect_ray_and_sphere() {
     let s = Box::new(Sphere::new()) as Box<dyn Shape>;
     let xs = intersect(&s, &r);
     assert_eq!(xs.len(), 2);
-    assert!(feq(xs.at(0).t(), 4.0));
-    assert!(peq(xs.at(0).shape(), &s));
-    assert!(feq(xs.at(1).t(), 6.0));
-    assert!(peq(xs.at(1).shape(), &s));
+    assert!(feq(xs[0].t(), 4.0));
+    assert!(peq(xs[0].shape(), &s));
+    assert!(feq(xs[1].t(), 6.0));
+    assert!(peq(xs[1].shape(), &s));
 }
 
 #[test]
@@ -18,8 +18,8 @@ fn intersect_ray_and_sphere_at_tangent() {
     let s = Box::new(Sphere::new()) as Box<dyn Shape>;
     let xs = intersect(&s, &r);
     assert_eq!(xs.len(), 2);
-    assert!(feq(xs.at(0).t(), 5.0));
-    assert!(feq(xs.at(1).t(), 5.0));
+    assert!(feq(xs[0].t(), 5.0));
+    assert!(feq(xs[1].t(), 5.0));
 }
 
 #[test]
@@ -36,8 +36,8 @@ fn intersect_ray_and_sphere_origin_inside() {
     let s = Box::new(Sphere::new()) as Box<dyn Shape>;
     let xs = intersect(&s, &r);
     assert_eq!(xs.len(), 2);
-    assert!(feq(xs.at(0).t(), -1.0));
-    assert!(feq(xs.at(1).t(), 1.0));
+    assert!(feq(xs[0].t(), -1.0));
+    assert!(feq(xs[1].t(), 1.0));
 }
 
 #[test]
@@ -46,6 +46,6 @@ fn intersect_ray_and_sphere_behind() {
     let s = Box::new(Sphere::new()) as Box<dyn Shape>;
     let xs = intersect(&s, &r);
     assert_eq!(xs.len(), 2);
-    assert!(feq(xs.at(0).t(), -6.0));
-    assert!(feq(xs.at(1).t(), -4.0));
+    assert!(feq(xs[0].t(), -6.0));
+    assert!(feq(xs[1].t(), -4.0));
 }
