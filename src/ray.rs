@@ -4,6 +4,7 @@
 use crate::matrix::Matrix;
 use crate::tuple::Tuple;
 
+#[derive(Debug)]
 pub struct Ray {
     origin: Tuple,
     direction: Tuple,
