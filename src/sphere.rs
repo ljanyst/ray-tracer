@@ -28,10 +28,12 @@ impl Shape for Sphere {
     fn intersect(&self, ray: &Ray) -> Vec<f64> {
         // Derivation: https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
 
-        // For now we assume a unit sphere centered at origin
-        let dst = ray.origin() - point(0.0, 0.0, 0.0);
-        let a = ray.direction().norm().powi(2);
-        let b = 2.0 * ray.direction().dot(&dst);
+        // We assume a unit sphere centered at origin and transform the ray to the
+        // object frame
+        let r = ray.transformed(self.transform.inverted());
+        let dst = r.origin() - point(0.0, 0.0, 0.0);
+        let a = r.direction().norm().powi(2);
+        let b = 2.0 * r.direction().dot(&dst);
         let c = dst.norm().powi(2) - 1.0; // r^2 == 1
         let delta = b.powi(2) - 4.0 * a * c;
 
