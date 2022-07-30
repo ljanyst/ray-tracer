@@ -1,21 +1,34 @@
 // Copyright 2022 Lukasz Janyst <lukasz@jany.st>
 // Licensed under the MIT license, see the LICENSE file for details.
 
+use crate::matrix::Matrix;
 use crate::ray::Ray;
 use crate::shape::Shape;
 use crate::tuple::point;
 
 pub struct Sphere {
-    id: u32,
+    transform: Matrix,
 }
 
 impl Sphere {
-    pub fn new() -> Sphere {
-        Sphere { id: 42 }
+    pub fn unit() -> Sphere {
+        Sphere {
+            transform: Matrix::one(),
+        }
     }
 
-    pub fn id(&self) -> u32 {
-        self.id
+    pub fn new(transform: Matrix) -> Sphere {
+        Sphere {
+            transform: transform,
+        }
+    }
+
+    pub fn current_transform(&self) -> &Matrix {
+        &self.transform
+    }
+
+    pub fn transform(&mut self, transform: Matrix) {
+        self.transform = transform * self.transform
     }
 }
 
