@@ -2,6 +2,7 @@
 // Licensed under the MIT license, see the LICENSE file for details.
 
 use crate::ray::Ray;
+use crate::shape::Shape;
 use crate::tuple::point;
 
 pub struct Sphere {}
@@ -10,8 +11,10 @@ impl Sphere {
     pub fn new() -> Sphere {
         Sphere {}
     }
+}
 
-    pub fn intersect(&self, ray: &Ray) -> Vec<f64> {
+impl Shape for Sphere {
+    fn intersect(&self, ray: &Ray) -> Vec<f64> {
         // Derivation: https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
 
         // For now we assume a unit sphere centered at origin
