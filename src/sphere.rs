@@ -37,8 +37,6 @@ impl Shape for Sphere {
         let s_delta = delta.sqrt();
         let d1 = (-b - s_delta) / 2.0 * a;
         let d2 = (-b + s_delta) / 2.0 * a;
-        let mut v = vec![d1, d2];
-        v.sort_by(|a, b| a.partial_cmp(b).unwrap());
-        v
+        vec![d1, d2]
     }
 }
