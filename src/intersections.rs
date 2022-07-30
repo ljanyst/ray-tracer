@@ -3,14 +3,19 @@
 
 use crate::ray::Ray;
 use crate::shape::Shape;
+use crate::{feq, peq};
 
+use std::cmp::{Eq, PartialEq};
+use std::fmt;
+
+#[derive(Copy, Clone)]
 pub struct Intersection<'a> {
     t: f64,
     shape: &'a Box<dyn Shape>,
 }
 
 impl<'a> Intersection<'a> {
-    pub fn new(t: f64, shape: &'a Box<dyn Shape>) -> Intersection<'a> {
+    pub fn new(t: f64, shape: &Box<dyn Shape>) -> Intersection {
         Intersection { t: t, shape: shape }
     }
 
@@ -18,26 +23,75 @@ impl<'a> Intersection<'a> {
         self.t
     }
 
-    pub fn shape(&self) -> &'a Box<dyn Shape> {
+    pub fn shape(&self) -> &Box<dyn Shape> {
         self.shape
     }
 }
 
+impl<'a> PartialEq for Intersection<'a> {
+    fn eq(&self, other: &Self) -> bool {
+        if !feq(self.t, other.t) {
+            return false;
+        }
+        if !peq(self.shape, other.shape) {
+            return false;
+        }
+        true
+    }
+}
+
+impl<'a> fmt::Debug for Intersection<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let ptr: *const dyn Shape = self.shape.as_ref();
+        f.debug_struct("Intersection")
+            .field("t", &self.t)
+            .field("shape", &ptr)
+            .finish()
+    }
+}
+
+impl<'a> Eq for Intersection<'a> {}
+
 pub struct Intersections<'a> {
-    ints: Vec<Intersection<'a>>,
+    xs: Vec<Intersection<'a>>,
 }
 
 impl<'a> Intersections<'a> {
-    pub fn new(ints: Vec<Intersection<'a>>) -> Intersections<'a> {
-        Intersections { ints: ints }
+    pub fn new() -> Intersections<'a> {
+        Intersections { xs: Vec::new() }
     }
 
-    pub fn at(&self, i: usize) -> &Intersection<'a> {
-        &self.ints[i]
+    pub fn from_vector(xs: Vec<Intersection>) -> Intersections {
+        Intersections { xs: xs }
+    }
+
+    pub fn at(&self, i: usize) -> &Intersection {
+        &self.xs[i]
+    }
+
+    pub fn append(&mut self, mut xs: Vec<Intersection<'a>>) {
+        self.xs.append(&mut xs);
+        self.xs.sort_by(|a, b| a.t().partial_cmp(&b.t()).unwrap());
+    }
+
+    pub fn push(&mut self, x: Intersection<'a>) {
+        self.xs.push(x);
+        self.xs.sort_by(|a, b| a.t().partial_cmp(&b.t()).unwrap());
     }
 
     pub fn len(&self) -> usize {
-        self.ints.len()
+        self.xs.len()
+    }
+
+    pub fn hit(&self) -> Option<Intersection> {
+        let mut res = None;
+        for x in self.xs.iter() {
+            if x.t() > 0.0 {
+                res = Some(*x);
+                break;
+            }
+        }
+        res
     }
 }
 
@@ -45,8 +99,8 @@ pub fn intersect<'a>(shape: &'a Box<dyn Shape>, ray: &Ray) -> Vec<Intersection<'
     let inx = shape.intersect(&ray);
     let mut res = Vec::new();
 
-    for i in inx.iter() {
-        res.push(Intersection::new(*i, shape));
+    for x in inx.iter() {
+        res.push(Intersection::new(*x, shape));
     }
     res
 }
