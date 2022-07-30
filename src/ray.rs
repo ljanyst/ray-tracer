@@ -1,6 +1,7 @@
 // Copyright 2022 Lukasz Janyst <lukasz@jany.st>
 // Licensed under the MIT license, see the LICENSE file for details.
 
+use crate::matrix::Matrix;
 use crate::tuple::Tuple;
 
 pub struct Ray {
@@ -26,5 +27,12 @@ impl Ray {
 
     pub fn position(&self, t: f64) -> Tuple {
         self.origin + (t * self.direction)
+    }
+
+    pub fn transformed(&self, transform: Matrix) -> Ray {
+        Ray {
+            origin: transform * self.origin,
+            direction: transform * self.direction,
+        }
     }
 }
