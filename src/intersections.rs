@@ -41,12 +41,12 @@ impl<'a> Intersections<'a> {
     }
 }
 
-pub fn intersect<'a>(shape: &'a Box<dyn Shape>, ray: &Ray) -> Intersections<'a> {
+pub fn intersect<'a>(shape: &'a Box<dyn Shape>, ray: &Ray) -> Vec<Intersection<'a>> {
     let inx = shape.intersect(&ray);
     let mut res = Vec::new();
 
     for i in inx.iter() {
         res.push(Intersection::new(*i, shape));
     }
-    Intersections::new(res)
+    res
 }
