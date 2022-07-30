@@ -5,11 +5,17 @@ use crate::ray::Ray;
 use crate::shape::Shape;
 use crate::tuple::point;
 
-pub struct Sphere {}
+pub struct Sphere {
+    id: u32,
+}
 
 impl Sphere {
     pub fn new() -> Sphere {
-        Sphere {}
+        Sphere { id: 42 }
+    }
+
+    pub fn id(&self) -> u32 {
+        self.id
     }
 }
 
