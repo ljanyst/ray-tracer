@@ -40,8 +40,8 @@ impl Shape for Sphere {
         }
 
         let s_delta = delta.sqrt();
-        let d1 = (-b - s_delta) / 2.0 * a;
-        let d2 = (-b + s_delta) / 2.0 * a;
+        let d1 = (-b - s_delta) / (2.0 * a);
+        let d2 = (-b + s_delta) / (2.0 * a);
         vec![d1, d2]
     }
 
