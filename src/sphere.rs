@@ -22,14 +22,6 @@ impl Sphere {
             transform: transform,
         }
     }
-
-    pub fn current_transform(&self) -> &Matrix {
-        &self.transform
-    }
-
-    pub fn transform(&mut self, transform: Matrix) {
-        self.transform = transform * self.transform
-    }
 }
 
 impl Shape for Sphere {
@@ -51,5 +43,13 @@ impl Shape for Sphere {
         let d1 = (-b - s_delta) / 2.0 * a;
         let d2 = (-b + s_delta) / 2.0 * a;
         vec![d1, d2]
+    }
+
+    fn current_transform(&self) -> &Matrix {
+        &self.transform
+    }
+
+    fn transform(&mut self, transform: Matrix) {
+        self.transform = transform * self.transform
     }
 }
