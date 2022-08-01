@@ -169,3 +169,14 @@ fn multiply_colors() {
     let c2 = color(0.9, 1.0, 0.1);
     assert_eq!(c1.hadamard(&c2), color(0.9, 0.2, 0.04));
 }
+
+#[test]
+fn reflect_vector() {
+    let v1 = vector(1.0, -1.0, 0.0);
+    let n1 = vector(0.0, 1.0, 0.0);
+    let sq22 = 2.0_f64.sqrt() / 2.0;
+    let v2 = vector(0.0, -1.0, 0.0);
+    let n2 = vector(sq22, sq22, 0.0);
+    assert_eq!(v1.reflected(&n1), vector(1.0, 1.0, 0.0));
+    assert_eq!(v2.reflected(&n2), vector(1.0, 0.0, 0.0));
+}
