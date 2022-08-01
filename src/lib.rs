@@ -13,6 +13,7 @@ pub use crate::sphere::*;
 pub use crate::transformations::*;
 pub use crate::tuple::*;
 pub use crate::utils::*;
+pub use crate::world::*;
 
 pub mod canvas;
 pub mod constants;
@@ -26,3 +27,4 @@ pub mod sphere;
 pub mod transformations;
 pub mod tuple;
 pub mod utils;
+pub mod world;
