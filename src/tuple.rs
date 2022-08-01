@@ -1,7 +1,7 @@
 // Copyright 2022 Lukasz Janyst <lukasz@jany.st>
 // Licensed under the MIT license, see the LICENSE file for details.
 
-use crate::constants::EPSILON;
+use crate::utils::feq;
 
 use std::cmp::{Eq, PartialEq};
 use std::ops::{Add, Div, Mul, Neg, Sub};
@@ -133,7 +133,7 @@ pub fn color(r: f64, g: f64, b: f64) -> Tuple {
 impl PartialEq for Tuple {
     fn eq(&self, other: &Self) -> bool {
         for i in 0..4 {
-            if (self.data[i] - other.data[i]).abs() > EPSILON {
+            if !feq(self.data[i], other.data[i]) {
                 return false;
             }
         }
