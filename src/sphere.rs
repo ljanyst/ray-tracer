@@ -5,6 +5,7 @@ use crate::matrix::Matrix;
 use crate::ray::Ray;
 use crate::shape::Shape;
 use crate::tuple::point;
+use crate::tuple::Tuple;
 
 pub struct Sphere {
     transform: Matrix,
@@ -57,5 +58,20 @@ impl Shape for Sphere {
     fn transform(&mut self, transform: Matrix) {
         self.transform = transform * self.transform;
         self.transform_inv = self.transform.inverted();
+    }
+
+    fn normal_at(&self, point_w: Tuple) -> Tuple {
+        let point_o = self.transform_inv * point_w;
+
+        // We get the normal in the object space by subtracting the origin since
+        // we assume the point is on the unit sphere at origin.
+        let normal_o = point_o - point(0.0, 0.0, 0.0);
+
+        // Technically we should invert and transpose the submatrix(3, 3), but
+        // we can clean up the mess by zeroing the w component of the result.
+        let mut normal_w = self.transform_inv.transposed() * normal_o;
+        normal_w.set(3, 0.0);
+
+        normal_w.normalized()
     }
 }
