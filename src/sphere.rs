@@ -8,18 +8,21 @@ use crate::tuple::point;
 
 pub struct Sphere {
     transform: Matrix,
+    transform_inv: Matrix,
 }
 
 impl Sphere {
     pub fn unit() -> Sphere {
         Sphere {
             transform: Matrix::one(),
+            transform_inv: Matrix::one(),
         }
     }
 
     pub fn new(transform: Matrix) -> Sphere {
         Sphere {
             transform: transform,
+            transform_inv: transform.inverted(),
         }
     }
 }
@@ -30,7 +33,7 @@ impl Shape for Sphere {
 
         // We assume a unit sphere centered at origin and transform the ray to the
         // object frame
-        let r = ray.transformed(self.transform.inverted());
+        let r = ray.transformed(self.transform_inv);
         let dst = r.origin() - point(0.0, 0.0, 0.0);
         let a = r.direction().norm().powi(2);
         let b = 2.0 * r.direction().dot(&dst);
@@ -52,6 +55,7 @@ impl Shape for Sphere {
     }
 
     fn transform(&mut self, transform: Matrix) {
-        self.transform = transform * self.transform
+        self.transform = transform * self.transform;
+        self.transform_inv = self.transform.inverted();
     }
 }
