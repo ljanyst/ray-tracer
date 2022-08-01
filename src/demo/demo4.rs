@@ -4,10 +4,12 @@
 use ray_tracer::{color, intersect, point, Canvas, Ray, Shape, Sphere};
 
 use std::io::{self, Write};
+use std::time::Instant;
 
 pub fn demo4() {
     print!("Rendering demo4... ");
     io::stdout().flush().unwrap();
+    let now = Instant::now();
     let ray_origin = point(0.0, 0.0, -5.0);
     let canvas_dim = (7.0_f64, 7.0_f64);
     let mut canvas = Canvas::new(500, 500);
@@ -31,7 +33,8 @@ pub fn demo4() {
         }
     }
 
+    let elapsed = now.elapsed();
     let fname = "demo4.ppm";
     canvas.save(fname).unwrap();
-    println!("done. Saved {}.", fname);
+    println!("done. Elapsed {:.2?}. Saved {}.", elapsed, fname);
 }
