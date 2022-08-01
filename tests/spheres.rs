@@ -1,5 +1,7 @@
 use ray_tracer::{feq, intersect, peq, point, vector, Ray, Shape, Sphere};
-use ray_tracer::{scaling, translation, Matrix};
+use ray_tracer::{rotation_z, scaling, translation, Matrix};
+
+use std::f64::consts::PI;
 
 #[test]
 fn intersect_ray_and_sphere() {
@@ -83,4 +85,36 @@ fn intersect_ray_and_translated_sphere() {
     s.transform(translation(5.0, 0.0, 0.0));
     let xs = intersect(&s, &r);
     assert_eq!(xs.len(), 0);
+}
+
+#[test]
+fn compute_unit_sphere_normal() {
+    let s = Sphere::unit();
+    let sq33 = 3.0_f64.sqrt() / 3.0;
+    let sqv = vector(sq33, sq33, sq33);
+    assert_eq!(s.normal_at(point(1.0, 0.0, 0.0)), vector(1.0, 0.0, 0.0));
+    assert_eq!(s.normal_at(point(0.0, 1.0, 0.0)), vector(0.0, 1.0, 0.0));
+    assert_eq!(s.normal_at(point(0.0, 0.0, 1.0)), vector(0.0, 0.0, 1.0));
+    assert_eq!(s.normal_at(point(sq33, sq33, sq33)), sqv);
+    assert_eq!(sqv.normalized(), sqv);
+}
+
+#[test]
+fn compute_translated_sphere_normal() {
+    let s = Sphere::new(translation(0.0, 1.0, 0.0));
+    assert_eq!(
+        s.normal_at(point(0.0, 1.70711, -0.70711)),
+        vector(0.0, 0.70711, -0.70711)
+    );
+}
+
+#[test]
+fn compute_transformed_sphere_normal() {
+    let s = Sphere::new(scaling(1.0, 0.5, 1.0) * rotation_z(PI / 5.0));
+
+    let sq22 = 2.0_f64.sqrt() / 2.0;
+    assert_eq!(
+        s.normal_at(point(0.0, sq22, -sq22)),
+        vector(0.0, 0.97014, -0.24254)
+    );
 }
