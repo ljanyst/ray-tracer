@@ -1,5 +1,5 @@
 use ray_tracer::{feq, intersect, peq, point, vector, Ray, Shape, Sphere};
-use ray_tracer::{rotation_z, scaling, translation, Matrix};
+use ray_tracer::{rotation_z, scaling, translation, Material, Matrix};
 
 use std::f64::consts::PI;
 
@@ -117,4 +117,14 @@ fn compute_transformed_sphere_normal() {
         s.normal_at(point(0.0, sq22, -sq22)),
         vector(0.0, 0.97014, -0.24254)
     );
+}
+
+#[test]
+fn assign_material_to_sphere() {
+    let mut s = Sphere::unit();
+    assert_eq!(s.material(), Material::new());
+    let mut m = Material::new();
+    m.ambient = 1.0;
+    s.set_material(&m);
+    assert_eq!(s.material(), m);
 }
