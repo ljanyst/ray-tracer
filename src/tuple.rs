@@ -116,6 +116,18 @@ impl Tuple {
     pub fn at(&self, i: usize) -> f64 {
         self.data[i]
     }
+
+    pub fn reflected(&self, normal: &Tuple) -> Tuple {
+        if !feq(self.data[3], 0.0) {
+            panic!("Can only compute a normal of a vector");
+        }
+
+        if !normal.is_vector() {
+            panic!("Normal must be a vector");
+        }
+
+        *self - (2.0 * self.dot(&normal)) * *normal
+    }
 }
 
 pub fn point(x: f64, y: f64, z: f64) -> Tuple {
