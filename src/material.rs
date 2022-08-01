@@ -2,7 +2,11 @@
 // Licensed under the MIT license, see the LICENSE file for details.
 
 use crate::tuple::{color, Tuple};
+use crate::utils::feq;
 
+use std::cmp::{Eq, PartialEq};
+
+#[derive(Debug, Copy, Clone)]
 pub struct Material {
     pub color: Tuple,
     pub ambient: f64,
@@ -22,3 +26,15 @@ impl Material {
         }
     }
 }
+
+impl PartialEq for Material {
+    fn eq(&self, other: &Self) -> bool {
+        self.color == other.color
+            && feq(self.ambient, other.ambient)
+            && feq(self.diffuse, other.diffuse)
+            && feq(self.specular, other.specular)
+            && feq(self.shininess, other.shininess)
+    }
+}
+
+impl Eq for Material {}
