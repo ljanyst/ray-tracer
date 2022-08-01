@@ -1,15 +1,16 @@
 // Copyright 2022 Lukasz Janyst <lukasz@jany.st>
 // Licensed under the MIT license, see the LICENSE file for details.
 
+use crate::material::Material;
 use crate::matrix::Matrix;
 use crate::ray::Ray;
 use crate::shape::Shape;
-use crate::tuple::point;
-use crate::tuple::Tuple;
+use crate::tuple::{point, Tuple};
 
 pub struct Sphere {
     transform: Matrix,
     transform_inv: Matrix,
+    material: Material,
 }
 
 impl Sphere {
@@ -17,6 +18,7 @@ impl Sphere {
         Sphere {
             transform: Matrix::one(),
             transform_inv: Matrix::one(),
+            material: Material::new(),
         }
     }
 
@@ -24,6 +26,7 @@ impl Sphere {
         Sphere {
             transform: transform,
             transform_inv: transform.inverted(),
+            material: Material::new(),
         }
     }
 }
@@ -58,6 +61,14 @@ impl Shape for Sphere {
     fn transform(&mut self, transform: Matrix) {
         self.transform = transform * self.transform;
         self.transform_inv = self.transform.inverted();
+    }
+
+    fn material(&self) -> Material {
+        self.material
+    }
+
+    fn set_material(&mut self, material: &Material) {
+        self.material = *material;
     }
 
     fn normal_at(&self, point_w: Tuple) -> Tuple {
