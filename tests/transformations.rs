@@ -1,5 +1,6 @@
 use ray_tracer::{point, scaling, shearing, translation, vector};
 use ray_tracer::{rotation_x, rotation_y, rotation_z};
+use ray_tracer::{view_transform, Matrix};
 
 use std::f64::consts::PI;
 
@@ -134,4 +135,44 @@ fn apply_chain_of_transformations_to_point() {
     let sc = scaling(5.0, 5.0, 5.0);
     let tr = translation(10.0, 5.0, 7.0);
     assert_eq!(tr * sc * rot * p, point(15.0, 0.0, 7.0));
+}
+
+#[test]
+fn transform_view_default() {
+    let from = point(0.0, 0.0, 0.0);
+    let to = point(0.0, 0.0, -1.0);
+    let up = vector(0.0, 1.0, 0.0);
+    assert_eq!(view_transform(from, to, up), Matrix::one());
+}
+
+#[test]
+fn transform_view_looking_to_positive_z() {
+    let from = point(0.0, 0.0, 0.0);
+    let to = point(0.0, 0.0, 1.0);
+    let up = vector(0.0, 1.0, 0.0);
+    assert_eq!(view_transform(from, to, up), scaling(-1.0, 1.0, -1.0));
+}
+
+#[test]
+fn transform_view_moves_the_world() {
+    let from = point(0.0, 0.0, 8.0);
+    let to = point(0.0, 0.0, 1.0);
+    let up = vector(0.0, 1.0, 0.0);
+    assert_eq!(view_transform(from, to, up), translation(0.0, 0.0, -8.0));
+}
+
+#[test]
+fn transform_view_arbitrary() {
+    let from = point(1.0, 3.0, 2.0);
+    let to = point(4.0, -2.0, 8.0);
+    let up = vector(1.0, 1.0, 0.0);
+    assert_eq!(
+        view_transform(from, to, up),
+        Matrix::new(
+            -0.50709, 0.50709, 0.67612, -2.36643, //
+            0.76772, 0.60609, 0.12122, -2.82843, //
+            -0.35857, 0.59761, -0.71714, 0.00000, //
+            0.00000, 0.00000, 0.00000, 1.00000 //
+        )
+    );
 }
