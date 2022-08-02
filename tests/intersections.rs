@@ -87,3 +87,31 @@ fn hit_intersection_unsorted() {
     xs.push(i4);
     assert_eq!(xs.hit(), Some(i4));
 }
+
+#[test]
+fn compute_intersection_properties() {
+    let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+    let s = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let i = Intersection::new(4.0, &s);
+    let p = i.properties(&r);
+    assert_eq!(p.t, i.t());
+    assert!(peq(p.shape, i.shape()));
+    assert_eq!(p.point, point(0.0, 0.0, -1.0));
+    assert_eq!(p.eyev, vector(0.0, 0.0, -1.0));
+    assert_eq!(p.normalv, vector(0.0, 0.0, -1.0));
+    assert_eq!(p.inside, false);
+}
+
+#[test]
+fn compute_intersection_properties_hit_inside() {
+    let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
+    let s = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let i = Intersection::new(1.0, &s);
+    let p = i.properties(&r);
+    assert_eq!(p.t, i.t());
+    assert!(peq(p.shape, i.shape()));
+    assert_eq!(p.point, point(0.0, 0.0, 1.0));
+    assert_eq!(p.eyev, vector(0.0, 0.0, -1.0));
+    assert_eq!(p.normalv, vector(0.0, 0.0, -1.0));
+    assert_eq!(p.inside, true);
+}
