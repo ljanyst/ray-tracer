@@ -3,6 +3,7 @@
 
 use crate::ray::Ray;
 use crate::shape::Shape;
+use crate::tuple::Tuple;
 use crate::{feq, peq};
 
 use std::cmp::{Eq, PartialEq};
@@ -25,6 +26,27 @@ impl<'a> Intersection<'a> {
 
     pub fn shape(&self) -> &Box<dyn Shape> {
         self.shape
+    }
+
+    pub fn properties(&self, ray: &Ray) -> IntersectionProperties {
+        let point = ray.position(self.t);
+        let mut normalv = self.shape.normal_at(point);
+        let eyev = -ray.direction();
+        let mut inside = false;
+
+        if normalv.dot(&eyev) < 0.0 {
+            inside = true;
+            normalv = -normalv;
+        }
+
+        IntersectionProperties {
+            t: self.t,
+            shape: self.shape,
+            point: point,
+            eyev: eyev,
+            normalv: normalv,
+            inside: inside,
+        }
     }
 }
 
@@ -51,6 +73,29 @@ impl<'a> fmt::Debug for Intersection<'a> {
 }
 
 impl<'a> Eq for Intersection<'a> {}
+
+pub struct IntersectionProperties<'a> {
+    pub t: f64,
+    pub shape: &'a Box<dyn Shape>,
+    pub point: Tuple,
+    pub eyev: Tuple,
+    pub normalv: Tuple,
+    pub inside: bool,
+}
+
+impl<'a> fmt::Debug for IntersectionProperties<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let ptr: *const dyn Shape = self.shape.as_ref();
+        f.debug_struct("IntersectionProperties")
+            .field("t", &self.t)
+            .field("shape", &ptr)
+            .field("point", &self.point)
+            .field("eyev", &self.eyev)
+            .field("normalv", &self.normalv)
+            .field("inside", &self.inside)
+            .finish()
+    }
+}
 
 pub struct Intersections<'a> {
     xs: Vec<Intersection<'a>>,
