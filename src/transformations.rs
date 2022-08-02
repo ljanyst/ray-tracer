@@ -2,6 +2,7 @@
 // Licensed under the MIT license, see the LICENSE file for details.
 
 use crate::matrix::Matrix;
+use crate::tuple::Tuple;
 
 pub fn translation(x: f64, y: f64, z: f64) -> Matrix {
     let mut res = Matrix::one();
@@ -58,4 +59,33 @@ pub fn shearing(xy: f64, xz: f64, yx: f64, yz: f64, zx: f64, zy: f64) -> Matrix 
     res.set(2, 0, zx);
     res.set(2, 1, zy);
     res
+}
+
+pub fn view_transform(from: Tuple, to: Tuple, up: Tuple) -> Matrix {
+    let forward = (to - from).normalized();
+    let left = forward.cross(&up.normalized());
+    let true_up = left.cross(&forward);
+    Matrix::new(
+        // 0
+        left.x(),
+        left.y(),
+        left.z(),
+        0.0,
+        // 1
+        true_up.x(),
+        true_up.y(),
+        true_up.z(),
+        0.0,
+        // 2
+        -forward.x(),
+        -forward.y(),
+        -forward.z(),
+        0.0,
+        // 3
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        //
+    ) * translation(-from.x(), -from.y(), -from.z())
 }
