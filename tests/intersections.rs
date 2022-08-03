@@ -1,5 +1,5 @@
 use ray_tracer::{feq, intersect, peq, point, vector, Ray, Shape, Sphere};
-use ray_tracer::{Intersection, Intersections};
+use ray_tracer::{translation, Intersection, Intersections, EPSILON};
 
 #[test]
 fn create_intersection() {
@@ -114,4 +114,14 @@ fn compute_intersection_properties_hit_inside() {
     assert_eq!(p.eyev, vector(0.0, 0.0, -1.0));
     assert_eq!(p.normalv, vector(0.0, 0.0, -1.0));
     assert_eq!(p.inside, true);
+}
+
+#[test]
+fn compute_intersection_properties_overpoint() {
+    let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+    let s = Box::new(Sphere::new(translation(0.0, 0.0, 1.0))) as Box<dyn Shape>;
+    let i = Intersection::new(5.0, &s);
+    let p = i.properties(&r);
+    assert!(p.over_point.z() < -EPSILON / 2.0);
+    assert!(p.point.z() > p.over_point.z());
 }
