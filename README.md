@@ -5,7 +5,7 @@ ray-tracer
 My implementation of the [Ray Tracer Challenge][rtc] with the focus on learning
 [Rust][rust] and hardware acceleration.
 
-Chapter 4 Demo - Red Shadow
+Chapter 5 Demo - Red Shadow
 ---------------------------
 
 Description:
@@ -15,11 +15,11 @@ Description:
  * for each pixel, color the pixel red if the ray intersects the sphere;
    otherwise, color the pixel black
 
-![Demo 4 rendering](demo-imgs/demo4.webp)
+![Demo 5 rendering](demo-imgs/demo5.webp)
 
-[code](src/demo/demo4.rs)
+[code](src/demo/demo5.rs)
 
-Chapter 5 Demo - The Phong Refletcion Model
+Chapter 6 Demo - The Phong Refletcion Model
 -------------------------------------------
 
 Description:
@@ -30,11 +30,11 @@ Description:
  * for each pixel, if the ray hits the sphere, compute the lighting at the
    intersection; make the pixel black otherwise
 
-![Demo 5 rendering](demo-imgs/demo5.webp)
+![Demo 6 rendering](demo-imgs/demo6.webp)
 
-[code](src/demo/demo5.rs)
+[code](src/demo/demo6.rs)
 
-Chapter 6 Demo - Worlds and Cameras
+Chapter 7 Demo - Worlds and Cameras
 -----------------------------------
 
 Description:
@@ -44,9 +44,9 @@ Description:
  * place the camera at a custom location
  * render the scene using the camera properties
 
-![Demo 6 rendering](demo-imgs/demo6.webp)
+![Demo 7 rendering](demo-imgs/demo7.webp)
 
-[code](src/demo/demo6.rs)
+[code](src/demo/demo7and8.rs)
 
 
 [rtc]: http://raytracerchallenge.com/
