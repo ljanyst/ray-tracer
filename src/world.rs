@@ -13,6 +13,7 @@ use crate::tuple::{color, point, Tuple};
 pub struct World {
     pub shapes: Vec<Box<dyn Shape>>,
     pub lights: Vec<Light>,
+    pub shadows: bool,
 }
 
 impl World {
@@ -20,6 +21,7 @@ impl World {
         World {
             shapes: Vec::new(),
             lights: Vec::new(),
+            shadows: true,
         }
     }
 
@@ -27,6 +29,7 @@ impl World {
         let mut w = World {
             shapes: Vec::new(),
             lights: Vec::new(),
+            shadows: true,
         };
 
         let l = point_light(point(-10.0, 10.0, -10.0), color(1.0, 1.0, 1.0));
@@ -61,13 +64,21 @@ impl World {
     pub fn shade_hit(&self, props: IntersectionProperties) -> Tuple {
         let mut color = Tuple::zero_color();
         for l in self.lights.iter() {
+            let mut shadowed = false;
+
+            if self.shadows {
+                // we need to use a point slightly above our point along the normal to
+                // account for floating-point inaccuracies
+                shadowed = self.is_shadowed(&l, props.over_point);
+            }
+
             color = color
                 + props.shape.material().lighting(
                     l,
                     &props.point,
                     &props.eyev,
                     &props.normalv,
-                    false,
+                    shadowed,
                 );
         }
         color
@@ -84,5 +95,20 @@ impl World {
         let h = hit.unwrap();
         let props = h.properties(ray);
         self.shade_hit(props)
+    }
+
+    pub fn is_shadowed(&self, light: &Light, pt: Tuple) -> bool {
+        let v = light.position - pt;
+        let distance = v.norm();
+        let direction = v.normalized();
+
+        let r = Ray::new(pt, direction);
+        let xs = self.intersect(&r);
+        let hit = xs.hit();
+
+        match hit {
+            Some(h) if h.t() < distance => true,
+            _ => false,
+        }
     }
 }
