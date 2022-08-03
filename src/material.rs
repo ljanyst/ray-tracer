@@ -28,7 +28,14 @@ impl Material {
     }
 
     /// Shade the material according to the Phong reflection model
-    pub fn lighting(&self, light: &Light, point: &Tuple, eyev: &Tuple, normalv: &Tuple) -> Tuple {
+    pub fn lighting(
+        &self,
+        light: &Light,
+        point: &Tuple,
+        eyev: &Tuple,
+        normalv: &Tuple,
+        in_shadow: bool,
+    ) -> Tuple {
         // See: https://en.wikipedia.org/wiki/Phong_reflection_model
         let effective_color = self.color.hadamard(&light.intensity);
 
@@ -37,6 +44,10 @@ impl Material {
 
         // Ambient contribution
         let ambient = self.ambient * effective_color;
+
+        if in_shadow {
+            return ambient;
+        }
 
         // Defuse and specular contributions are black by default
         let mut diffuse = color(0.0, 0.0, 0.0);
