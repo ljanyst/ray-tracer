@@ -34,6 +34,21 @@ Description:
 
 [code](src/demo/demo5.rs)
 
+Chapter 6 Demo - Worlds and Cameras
+-----------------------------------
+
+Description:
+
+ * build a world with ball shapes in it
+ * add the lighting
+ * place the camera at a custom location
+ * render the scene using the camera properties
+
+![Demo 6 rendering](demo-imgs/demo6.webp)
+
+[code](src/demo/demo6.rs)
+
+
 [rtc]: http://raytracerchallenge.com/
 [rust]: https://www.rust-lang.org/
 
