@@ -1,10 +1,11 @@
 // Copyright 2022 Lukasz Janyst <lukasz@jany.st>
 // Licensed under the MIT license, see the LICENSE file for details.
 
+use crate::constants::EPSILON;
 use crate::ray::Ray;
 use crate::shape::Shape;
 use crate::tuple::Tuple;
-use crate::{feq, peq};
+use crate::utils::{feq, peq};
 
 use std::cmp::{Eq, PartialEq};
 use std::fmt;
@@ -46,6 +47,7 @@ impl<'a> Intersection<'a> {
             eyev: eyev,
             normalv: normalv,
             inside: inside,
+            over_point: point + normalv * EPSILON,
         }
     }
 }
@@ -81,6 +83,7 @@ pub struct IntersectionProperties<'a> {
     pub eyev: Tuple,
     pub normalv: Tuple,
     pub inside: bool,
+    pub over_point: Tuple,
 }
 
 impl<'a> fmt::Debug for IntersectionProperties<'a> {
@@ -93,6 +96,7 @@ impl<'a> fmt::Debug for IntersectionProperties<'a> {
             .field("eyev", &self.eyev)
             .field("normalv", &self.normalv)
             .field("inside", &self.inside)
+            .field("over_point", &self.over_point)
             .finish()
     }
 }
