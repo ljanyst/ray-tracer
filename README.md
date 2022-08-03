@@ -48,6 +48,16 @@ Description:
 
 [code](src/demo/demo7and8.rs)
 
+Chapter 8 Demo - Shadows
+-----------------------------------
+
+Description:
+
+ * add shadows to the world above
+
+![Demo 8 rendering](demo-imgs/demo8.webp)
+
+[code](src/demo/demo7and8.rs)
 
 [rtc]: http://raytracerchallenge.com/
 [rust]: https://www.rust-lang.org/
