@@ -42,7 +42,7 @@ pub fn demo5() {
                 let c = hit
                     .shape()
                     .material()
-                    .lighting(&light, &point, &eyev, &normalv);
+                    .lighting(&light, &point, &eyev, &normalv, false);
                 canvas.set(i, j, &c);
             }
         }

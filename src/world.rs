@@ -62,10 +62,13 @@ impl World {
         let mut color = Tuple::zero_color();
         for l in self.lights.iter() {
             color = color
-                + props
-                    .shape
-                    .material()
-                    .lighting(l, &props.point, &props.eyev, &props.normalv);
+                + props.shape.material().lighting(
+                    l,
+                    &props.point,
+                    &props.eyev,
+                    &props.normalv,
+                    false,
+                );
         }
         color
     }
