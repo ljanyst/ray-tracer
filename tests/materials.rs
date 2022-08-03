@@ -18,7 +18,7 @@ fn shade_material_light_behind_eye_perpendicular_to_surface() {
     let normalv = vector(0.0, 0.0, -1.0);
     let light = point_light(point(0.0, 0.0, -10.0), color(1.0, 1.0, 1.0));
     assert_eq!(
-        m.lighting(&light, &pos, &eyev, &normalv),
+        m.lighting(&light, &pos, &eyev, &normalv, false),
         color(1.9, 1.9, 1.9)
     );
 }
@@ -32,7 +32,7 @@ fn shade_material_light_perpendicular_eye_45_to_surface() {
     let normalv = vector(0.0, 0.0, -1.0);
     let light = point_light(point(0.0, 0.0, -10.0), color(1.0, 1.0, 1.0));
     assert_eq!(
-        m.lighting(&light, &pos, &eyev, &normalv),
+        m.lighting(&light, &pos, &eyev, &normalv, false),
         color(1.0, 1.0, 1.0)
     );
 }
@@ -45,7 +45,20 @@ fn shade_material_light_45_eye_perpendicular_to_surface() {
     let normalv = vector(0.0, 0.0, -1.0);
     let light = point_light(point(0.0, 0.0, 10.0), color(1.0, 1.0, 1.0));
     assert_eq!(
-        m.lighting(&light, &pos, &eyev, &normalv),
+        m.lighting(&light, &pos, &eyev, &normalv, false),
+        color(0.1, 0.1, 0.1)
+    );
+}
+
+#[test]
+fn shade_material_in_shadow() {
+    let m = Material::new();
+    let pos = point(0.0, 0.0, 0.0);
+    let eyev = vector(0.0, 0.0, -1.0);
+    let normalv = vector(0.0, 0.0, -1.0);
+    let light = point_light(point(0.0, 0.0, 10.0), color(1.0, 1.0, 1.0));
+    assert_eq!(
+        m.lighting(&light, &pos, &eyev, &normalv, true),
         color(0.1, 0.1, 0.1)
     );
 }
