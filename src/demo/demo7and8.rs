@@ -80,10 +80,24 @@ pub fn demo7and8() {
         vector(0.0, 1.0, 0.0),
     ));
 
+    world.shadows = false;
     let canvas = camera.render(&world);
 
     let elapsed = now.elapsed();
     let fname = "demo7.ppm";
+    canvas.save(fname).unwrap();
+    println!("done. Elapsed {:.2?}. Saved {}.", elapsed, fname);
+
+    // Shadows
+    print!("Rendering demo8... ");
+    io::stdout().flush().unwrap();
+    let now = Instant::now();
+
+    world.shadows = true;
+    let canvas = camera.render(&world);
+
+    let elapsed = now.elapsed();
+    let fname = "demo8.ppm";
     canvas.save(fname).unwrap();
     println!("done. Elapsed {:.2?}. Saved {}.", elapsed, fname);
 }
