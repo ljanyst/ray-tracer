@@ -1,46 +1,22 @@
 // Copyright 2022 Lukasz Janyst <lukasz@jany.st>
 // Licensed under the MIT license, see the LICENSE file for details.
 
-use crate::material::Material;
 use crate::matrix::Matrix;
 use crate::ray::Ray;
-use crate::shape::Shape;
+use crate::shape::{LocalShape, Shape, ShapeImpl};
 use crate::tuple::{point, Tuple};
 
-pub struct Sphere {
-    transform: Matrix,
-    transform_inv: Matrix,
-    material: Material,
-}
+pub struct Sphere {}
 
-impl Sphere {
-    pub fn unit() -> Sphere {
-        Sphere {
-            transform: Matrix::one(),
-            transform_inv: Matrix::one(),
-            material: Material::new(),
-        }
-    }
-
-    pub fn new(transform: Matrix) -> Sphere {
-        Sphere {
-            transform: transform,
-            transform_inv: transform.inverted(),
-            material: Material::new(),
-        }
-    }
-}
-
-impl Shape for Sphere {
-    fn intersect(&self, ray: &Ray) -> Vec<f64> {
+impl LocalShape for Sphere {
+    fn local_intersect(&self, ray: &Ray) -> Vec<f64> {
         // Derivation: https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
 
-        // We assume a unit sphere centered at origin and transform the ray to the
-        // object frame
-        let r = ray.transformed(self.transform_inv);
-        let dst = r.origin() - point(0.0, 0.0, 0.0);
-        let a = r.direction().norm().powi(2);
-        let b = 2.0 * r.direction().dot(&dst);
+        // We are at a unit sphere centered at origin and the ray is expressed in the
+        // local frame
+        let dst = ray.origin() - point(0.0, 0.0, 0.0);
+        let a = ray.direction().norm().powi(2);
+        let b = 2.0 * ray.direction().dot(&dst);
         let c = dst.norm().powi(2) - 1.0; // r^2 == 1
         let delta = b.powi(2) - 4.0 * a * c;
 
@@ -54,35 +30,19 @@ impl Shape for Sphere {
         vec![d1, d2]
     }
 
-    fn current_transform(&self) -> &Matrix {
-        &self.transform
+    fn local_normal_at(&self, pt: Tuple) -> Tuple {
+        // We get the normal in the local frame by subtracting the origin since
+        // the point is on a unit sphere at origin.
+        pt - point(0.0, 0.0, 0.0)
     }
+}
 
-    fn transform(&mut self, transform: Matrix) {
-        self.transform = transform * self.transform;
-        self.transform_inv = self.transform.inverted();
-    }
+pub fn sphere_unit() -> Box<dyn Shape> {
+    Box::new(ShapeImpl::new(Sphere {}))
+}
 
-    fn material(&self) -> Material {
-        self.material
-    }
-
-    fn set_material(&mut self, material: &Material) {
-        self.material = *material;
-    }
-
-    fn normal_at(&self, point_w: Tuple) -> Tuple {
-        let point_o = self.transform_inv * point_w;
-
-        // We get the normal in the object space by subtracting the origin since
-        // we assume the point is on the unit sphere at origin.
-        let normal_o = point_o - point(0.0, 0.0, 0.0);
-
-        // Technically we should invert and transpose the submatrix(3, 3), but
-        // we can clean up the mess by zeroing the w component of the result.
-        let mut normal_w = self.transform_inv.transposed() * normal_o;
-        normal_w.set(3, 0.0);
-
-        normal_w.normalized()
-    }
+pub fn sphere(transform: Matrix) -> Box<dyn Shape> {
+    let mut s = Box::new(ShapeImpl::new(Sphere {}));
+    s.transform(transform);
+    s
 }
