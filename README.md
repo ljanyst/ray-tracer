@@ -59,6 +59,18 @@ Description:
 
 [code](src/demo/demo7and8.rs)
 
+Chapter 9 Demo - Plane
+-----------------------------------
+
+Description:
+
+ * remove the squashed spheres that simulate a room from the previous demo
+ * add the xz plane at origin
+
+![Demo 9 rendering](demo-imgs/demo9.webp)
+
+[code](src/demo/demo9.rs)
+
 [rtc]: http://raytracerchallenge.com/
 [rust]: https://www.rust-lang.org/
 
