@@ -42,7 +42,7 @@ pub fn sphere_unit() -> Box<dyn Shape> {
 }
 
 pub fn sphere(transform: Matrix) -> Box<dyn Shape> {
-    let mut s = Box::new(ShapeImpl::new(Sphere {}));
+    let mut s = sphere_unit();
     s.transform(transform);
     s
 }
