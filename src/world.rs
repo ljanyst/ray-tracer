@@ -6,7 +6,7 @@ use crate::light::{point_light, Light};
 use crate::material::Material;
 use crate::ray::Ray;
 use crate::shape::Shape;
-use crate::sphere::Sphere;
+use crate::sphere::{sphere, sphere_unit};
 use crate::transformations::scaling;
 use crate::tuple::{color, point, Tuple};
 
@@ -35,14 +35,14 @@ impl World {
         let l = point_light(point(-10.0, 10.0, -10.0), color(1.0, 1.0, 1.0));
         w.lights.push(l);
 
-        let mut s1 = Box::new(Sphere::unit()) as Box<dyn Shape>;
+        let mut s1 = sphere_unit();
         let mut m1 = Material::new();
         m1.color = color(0.8, 1.0, 0.6);
         m1.diffuse = 0.7;
         m1.specular = 0.2;
         s1.set_material(&m1);
 
-        let s2 = Box::new(Sphere::new(scaling(0.5, 0.5, 0.5))) as Box<dyn Shape>;
+        let s2 = sphere(scaling(0.5, 0.5, 0.5));
 
         w.shapes.push(s1);
         w.shapes.push(s2);
