@@ -4,7 +4,7 @@
 use crate::matrix::Matrix;
 use crate::ray::Ray;
 use crate::shape::{LocalShape, Shape, ShapeImpl};
-use crate::tuple::{point, Tuple};
+use crate::tuple::{vector, Tuple};
 use crate::utils::feq;
 
 pub struct Plane {}
@@ -25,7 +25,7 @@ impl LocalShape for Plane {
 
     fn local_normal_at(&self, _pt: Tuple) -> Tuple {
         // We have an xz plane at origin, so normal is constant and points towards y
-        point(0.0, 1.0, 0.0)
+        vector(0.0, 1.0, 0.0)
     }
 }
 
