@@ -1,5 +1,5 @@
 use ray_tracer::{color, feq, point, point_light, vector, Intersection, Ray, World};
-use ray_tracer::{translation, Sphere};
+use ray_tracer::{sphere, sphere_unit, translation};
 
 #[test]
 fn intersect_ray_with_world() {
@@ -85,9 +85,8 @@ fn shade_hit_in_shadow() {
     let mut w = World::empty();
     let l = point_light(point(0.0, 0.0, -10.0), color(1.0, 1.0, 1.0));
     w.lights.push(l);
-    w.shapes.push(Box::new(Sphere::unit()));
-    w.shapes
-        .push(Box::new(Sphere::new(translation(0.0, 0.0, 10.0))));
+    w.shapes.push(sphere_unit());
+    w.shapes.push(sphere(translation(0.0, 0.0, 10.0)));
 
     let r = Ray::new(point(0.0, 0.0, 5.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(4.0, &w.shapes[1]);

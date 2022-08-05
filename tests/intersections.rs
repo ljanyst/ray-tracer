@@ -1,9 +1,9 @@
-use ray_tracer::{feq, intersect, peq, point, vector, Ray, Shape, Sphere};
+use ray_tracer::{feq, intersect, peq, point, sphere, sphere_unit, vector, Ray};
 use ray_tracer::{translation, Intersection, Intersections, EPSILON};
 
 #[test]
 fn create_intersection() {
-    let s = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let s = sphere_unit();
     let i = Intersection::new(3.5, &s);
     assert_eq!(i.t(), 3.5);
     assert!(peq(i.shape(), &s));
@@ -12,7 +12,7 @@ fn create_intersection() {
 #[test]
 fn create_intersections() {
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
-    let s = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let s = sphere_unit();
     let mut xs = Intersections::new();
     xs.append(intersect(&s, &r));
     assert_eq!(xs.len(), 2);
@@ -25,7 +25,7 @@ fn create_intersections() {
 #[test]
 fn create_intersections_from_a_vector() {
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
-    let s = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let s = sphere_unit();
     let xs = Intersections::from_vector(intersect(&s, &r));
     assert_eq!(xs.len(), 2);
     assert!(feq(xs.at(0).t(), 4.0));
@@ -36,7 +36,7 @@ fn create_intersections_from_a_vector() {
 
 #[test]
 fn aggregate_intersections() {
-    let s = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let s = sphere_unit();
     let i1 = Intersection::new(1.0, &s);
     let i2 = Intersection::new(2.0, &s);
     let mut xs = Intersections::new();
@@ -49,7 +49,7 @@ fn aggregate_intersections() {
 
 #[test]
 fn hit_intersection_all_positive() {
-    let s = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let s = sphere_unit();
     let mut xs = Intersections::new();
     let i1 = Intersection::new(1.0, &s);
     xs.push(i1);
@@ -59,7 +59,7 @@ fn hit_intersection_all_positive() {
 
 #[test]
 fn hit_intersection_some_negative() {
-    let s = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let s = sphere_unit();
     let mut xs = Intersections::new();
     xs.push(Intersection::new(-1.0, &s));
     let i2 = Intersection::new(1.0, &s);
@@ -69,7 +69,7 @@ fn hit_intersection_some_negative() {
 
 #[test]
 fn hit_intersection_all_negative() {
-    let s = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let s = sphere_unit();
     let mut xs = Intersections::new();
     xs.push(Intersection::new(-2.0, &s));
     xs.push(Intersection::new(-1.0, &s));
@@ -78,7 +78,7 @@ fn hit_intersection_all_negative() {
 
 #[test]
 fn hit_intersection_unsorted() {
-    let s = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let s = sphere_unit();
     let mut xs = Intersections::new();
     xs.push(Intersection::new(5.0, &s));
     xs.push(Intersection::new(7.0, &s));
@@ -91,7 +91,7 @@ fn hit_intersection_unsorted() {
 #[test]
 fn compute_intersection_properties() {
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
-    let s = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let s = sphere_unit();
     let i = Intersection::new(4.0, &s);
     let p = i.properties(&r);
     assert_eq!(p.t, i.t());
@@ -105,7 +105,7 @@ fn compute_intersection_properties() {
 #[test]
 fn compute_intersection_properties_hit_inside() {
     let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
-    let s = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let s = sphere_unit();
     let i = Intersection::new(1.0, &s);
     let p = i.properties(&r);
     assert_eq!(p.t, i.t());
@@ -119,7 +119,7 @@ fn compute_intersection_properties_hit_inside() {
 #[test]
 fn compute_intersection_properties_overpoint() {
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
-    let s = Box::new(Sphere::new(translation(0.0, 0.0, 1.0))) as Box<dyn Shape>;
+    let s = sphere(translation(0.0, 0.0, 1.0));
     let i = Intersection::new(5.0, &s);
     let p = i.properties(&r);
     assert!(p.over_point.z() < -EPSILON / 2.0);
