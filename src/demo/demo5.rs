@@ -1,7 +1,7 @@
 // Copyright 2022 Lukasz Janyst <lukasz@jany.st>
 // Licensed under the MIT license, see the LICENSE file for details.
 
-use ray_tracer::{color, intersect, point, Canvas, Ray, Shape, Sphere};
+use ray_tracer::{color, intersect, point, sphere_unit, Canvas, Ray};
 
 use std::io::{self, Write};
 use std::time::Instant;
@@ -13,7 +13,7 @@ pub fn demo5() {
     let ray_origin = point(0.0, 0.0, -5.0);
     let canvas_dim = (7.0_f64, 7.0_f64);
     let mut canvas = Canvas::new(500, 500);
-    let sphere = Box::new(Sphere::unit()) as Box<dyn Shape>;
+    let sphere = sphere_unit();
     let offset = (canvas_dim.0 / 2.0, canvas_dim.1 / 2.0);
     let cz = 10.0_f64;
 
