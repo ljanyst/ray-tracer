@@ -1,3 +1,4 @@
+use ray_tracer::ring_pattern_unit;
 use ray_tracer::Tuple;
 use ray_tracer::{color, gradient_pattern_unit, point, stripe_pattern_unit};
 
@@ -52,4 +53,13 @@ fn compare_patterns() {
     assert_eq!(&p1, &p1);
     assert_ne!(&p1, &p2);
     assert_ne!(&p1, &p3);
+}
+
+#[test]
+fn verify_ring_pattern() {
+    let p = ring_pattern_unit(WHITE, BLACK);
+    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.local_color_at(point(1.0, 0.0, 0.0)), BLACK);
+    assert_eq!(p.local_color_at(point(0.0, 0.0, 1.0)), BLACK);
+    assert_eq!(p.local_color_at(point(0.708, 0.0, 0.708)), BLACK);
 }
