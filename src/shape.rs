@@ -12,6 +12,7 @@ pub trait Shape: Deref<Target = dyn LocalShape> {
     fn intersect(&self, ray: &Ray) -> Vec<f64>;
     fn transform(&mut self, transform: Matrix);
     fn current_transform(&self) -> &Matrix;
+    fn current_inverse_transform(&self) -> &Matrix;
     fn normal_at(&self, pt: Tuple) -> Tuple;
     fn material(&self) -> Material;
     fn set_material(&mut self, material: &Material);
@@ -59,6 +60,10 @@ where
 
     fn current_transform(&self) -> &Matrix {
         &self.transform
+    }
+
+    fn current_inverse_transform(&self) -> &Matrix {
+        &self.transform_inv
     }
 
     fn normal_at(&self, pt: Tuple) -> Tuple {
