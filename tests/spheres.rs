@@ -123,9 +123,9 @@ fn compute_transformed_sphere_normal() {
 #[test]
 fn assign_material_to_sphere() {
     let mut s = sphere_unit();
-    assert_eq!(s.material(), Material::new());
+    assert_eq!(s.material(), &Material::new());
     let mut m = Material::new();
     m.ambient = 1.0;
     s.set_material(&m);
-    assert_eq!(s.material(), m);
+    assert_eq!(s.material(), &m);
 }

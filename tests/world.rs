@@ -56,8 +56,8 @@ fn shade_ray_world_hit() {
 #[test]
 fn shade_ray_world_hit_intersection_behind_day() {
     let mut w = World::default();
-    let mut m0 = w.shapes[0].material();
-    let mut m1 = w.shapes[1].material();
+    let mut m0 = w.shapes[0].material().clone();
+    let mut m1 = w.shapes[1].material().clone();
     m0.ambient = 1.0;
     m1.ambient = 1.0;
     w.shapes[0].set_material(&m0);
