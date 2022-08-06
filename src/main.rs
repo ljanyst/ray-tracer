@@ -13,9 +13,32 @@ mod demo {
     pub mod demo9;
 }
 
+use std::collections::HashMap;
+use std::env;
+
 pub fn main() {
-    demo5();
-    demo6();
-    demo7and8();
-    demo9();
+    let mut demos = HashMap::<&str, fn()>::new();
+    demos.insert("demo5", demo5);
+    demos.insert("demo6", demo6);
+    demos.insert("demo7and8", demo7and8);
+    demos.insert("demo9", demo9);
+
+    let mut args: Vec<String> = env::args().collect();
+    args.remove(0);
+    if args.len() == 0 {
+        println!("Available demos:");
+        let mut kx: Vec<&&str> = demos.keys().collect();
+        kx.sort();
+        for k in kx.iter() {
+            println!("{}", k);
+        }
+        return;
+    }
+
+    for arg in args.iter() {
+        match demos.get(arg.as_str()) {
+            None => println!("No such demo: {}", arg),
+            Some(func) => func(),
+        }
+    }
 }
