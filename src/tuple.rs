@@ -12,23 +12,23 @@ pub struct Tuple {
 }
 
 impl Tuple {
-    pub fn zero_point() -> Tuple {
+    pub const fn zero_point() -> Tuple {
         Self {
             data: [0.0, 0.0, 0.0, 1.0],
         }
     }
 
-    pub fn zero_vector() -> Tuple {
+    pub const fn zero_vector() -> Tuple {
         Self {
             data: [0.0, 0.0, 0.0, 0.0],
         }
     }
 
-    pub fn zero_color() -> Tuple {
+    pub const fn zero_color() -> Tuple {
         Tuple::zero_vector()
     }
 
-    pub fn new(x: f64, y: f64, z: f64, w: f64) -> Tuple {
+    pub const fn new(x: f64, y: f64, z: f64, w: f64) -> Tuple {
         Self { data: [x, y, z, w] }
     }
 
@@ -130,15 +130,15 @@ impl Tuple {
     }
 }
 
-pub fn point(x: f64, y: f64, z: f64) -> Tuple {
+pub const fn point(x: f64, y: f64, z: f64) -> Tuple {
     Tuple::new(x, y, z, 1.0)
 }
 
-pub fn vector(x: f64, y: f64, z: f64) -> Tuple {
+pub const fn vector(x: f64, y: f64, z: f64) -> Tuple {
     Tuple::new(x, y, z, 0.0)
 }
 
-pub fn color(r: f64, g: f64, b: f64) -> Tuple {
+pub const fn color(r: f64, g: f64, b: f64) -> Tuple {
     vector(r, g, b)
 }
 
