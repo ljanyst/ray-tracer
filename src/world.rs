@@ -74,6 +74,7 @@ impl World {
 
             color = color
                 + props.shape.material().lighting(
+                    props.shape,
                     l,
                     &props.point,
                     &props.eyev,
