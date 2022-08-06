@@ -2,14 +2,17 @@
 // Licensed under the MIT license, see the LICENSE file for details.
 
 use crate::light::Light;
+use crate::pattern::Pattern;
 use crate::tuple::{color, Tuple};
 use crate::utils::feq;
+use crate::Shape;
 
 use std::cmp::{Eq, PartialEq};
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Clone)]
 pub struct Material {
     pub color: Tuple,
+    pub pattern: Option<Box<dyn Pattern>>,
     pub ambient: f64,
     pub diffuse: f64,
     pub specular: f64,
@@ -20,6 +23,7 @@ impl Material {
     pub fn new() -> Material {
         Material {
             color: color(1.0, 1.0, 1.0),
+            pattern: None,
             ambient: 0.1,
             diffuse: 0.9,
             specular: 0.9,
@@ -30,17 +34,23 @@ impl Material {
     /// Shade the material according to the Phong reflection model
     pub fn lighting(
         &self,
+        shape: &Box<dyn Shape>,
         light: &Light,
-        point: &Tuple,
+        pt: &Tuple,
         eyev: &Tuple,
         normalv: &Tuple,
         in_shadow: bool,
     ) -> Tuple {
         // See: https://en.wikipedia.org/wiki/Phong_reflection_model
-        let effective_color = self.color.hadamard(&light.intensity);
+
+        let c = match self.pattern.as_ref() {
+            None => self.color,
+            Some(pattern) => pattern.color_at(shape, *pt),
+        };
+        let effective_color = c.hadamard(&light.intensity);
 
         // Direction to the light source
-        let lightv = (light.position - *point).normalized();
+        let lightv = (light.position - *pt).normalized();
 
         // Ambient contribution
         let ambient = self.ambient * effective_color;
@@ -82,6 +92,7 @@ impl PartialEq for Material {
             && feq(self.diffuse, other.diffuse)
             && feq(self.specular, other.specular)
             && feq(self.shininess, other.shininess)
+            && self.pattern == other.pattern
     }
 }
 
