@@ -1,5 +1,5 @@
-use ray_tracer::ring_pattern_unit;
 use ray_tracer::Tuple;
+use ray_tracer::{checker_pattern_unit, ring_pattern_unit};
 use ray_tracer::{color, gradient_pattern_unit, point, stripe_pattern_unit};
 
 const BLACK: Tuple = color(0.0, 0.0, 0.0);
@@ -62,4 +62,20 @@ fn verify_ring_pattern() {
     assert_eq!(p.local_color_at(point(1.0, 0.0, 0.0)), BLACK);
     assert_eq!(p.local_color_at(point(0.0, 0.0, 1.0)), BLACK);
     assert_eq!(p.local_color_at(point(0.708, 0.0, 0.708)), BLACK);
+}
+
+#[test]
+fn verify_checker_pattern() {
+    let p = checker_pattern_unit(WHITE, BLACK);
+    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.local_color_at(point(0.99, 0.0, 0.0)), WHITE);
+    assert_eq!(p.local_color_at(point(1.01, 0.0, 0.0)), BLACK);
+
+    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.local_color_at(point(0.0, 0.99, 0.0)), WHITE);
+    assert_eq!(p.local_color_at(point(0.0, 1.01, 0.0)), BLACK);
+
+    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.99)), WHITE);
+    assert_eq!(p.local_color_at(point(0.0, 0.0, 1.01)), BLACK);
 }
