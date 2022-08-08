@@ -11,36 +11,36 @@ fn verify_stripe_pattern() {
     let p = stripe_pattern_unit(WHITE, BLACK);
 
     // constant in y
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(0.0, 1.0, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(0.0, 2.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.0, 1.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.0, 2.0, 0.0)), WHITE);
 
     // constant in z
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 1.0)), WHITE);
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 2.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 1.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 2.0)), WHITE);
 
     // alternates in x
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(0.9, 0.0, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(1.0, 0.0, 0.0)), BLACK);
-    assert_eq!(p.local_color_at(point(-0.1, 0.0, 0.0)), BLACK);
-    assert_eq!(p.local_color_at(point(-1.0, 0.0, 0.0)), BLACK);
-    assert_eq!(p.local_color_at(point(-1.1, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.9, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(1.0, 0.0, 0.0)), BLACK);
+    assert_eq!(p.shape_color_at(point(-0.1, 0.0, 0.0)), BLACK);
+    assert_eq!(p.shape_color_at(point(-1.0, 0.0, 0.0)), BLACK);
+    assert_eq!(p.shape_color_at(point(-1.1, 0.0, 0.0)), WHITE);
 }
 
 #[test]
 fn verify_gradient_pattern() {
     let p = gradient_pattern_unit(WHITE, BLACK);
 
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 0.0)), WHITE);
     assert_eq!(
-        p.local_color_at(point(0.25, 0.0, 0.0)),
+        p.shape_color_at(point(0.25, 0.0, 0.0)),
         color(0.75, 0.75, 0.75)
     );
-    assert_eq!(p.local_color_at(point(0.5, 0.0, 0.0)), color(0.5, 0.5, 0.5));
+    assert_eq!(p.shape_color_at(point(0.5, 0.0, 0.0)), color(0.5, 0.5, 0.5));
     assert_eq!(
-        p.local_color_at(point(0.75, 0.0, 0.0)),
+        p.shape_color_at(point(0.75, 0.0, 0.0)),
         color(0.25, 0.25, 0.25)
     );
 }
@@ -59,26 +59,26 @@ fn compare_patterns() {
 #[test]
 fn verify_ring_pattern() {
     let p = ring_pattern_unit(WHITE, BLACK);
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(1.0, 0.0, 0.0)), BLACK);
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 1.0)), BLACK);
-    assert_eq!(p.local_color_at(point(0.708, 0.0, 0.708)), BLACK);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(1.0, 0.0, 0.0)), BLACK);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 1.0)), BLACK);
+    assert_eq!(p.shape_color_at(point(0.708, 0.0, 0.708)), BLACK);
 }
 
 #[test]
 fn verify_checker_pattern() {
     let p = checker_pattern_unit(WHITE, BLACK);
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(0.99, 0.0, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(1.01, 0.0, 0.0)), BLACK);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.99, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(1.01, 0.0, 0.0)), BLACK);
 
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(0.0, 0.99, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(0.0, 1.01, 0.0)), BLACK);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.0, 0.99, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.0, 1.01, 0.0)), BLACK);
 
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.99)), WHITE);
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 1.01)), BLACK);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 0.99)), WHITE);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 1.01)), BLACK);
 }
 
 #[test]
@@ -86,20 +86,20 @@ fn verify_radial_gradient_pattern() {
     let p = radial_gradient_pattern_unit(WHITE, BLACK);
     let sq22 = 2.0_f64.sqrt() * 2.0;
 
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(1.0, 0.0, 0.0)), BLACK);
-    assert_eq!(p.local_color_at(point(0.0, 0.0, 1.0)), BLACK);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(1.0, 0.0, 0.0)), BLACK);
+    assert_eq!(p.shape_color_at(point(0.0, 0.0, 1.0)), BLACK);
 
     assert_eq!(
-        p.local_color_at(point(1.0 / sq22, 0.0, 1.0 / sq22)),
+        p.shape_color_at(point(1.0 / sq22, 0.0, 1.0 / sq22)),
         color(0.5, 0.5, 0.5)
     );
 
     // The pattern alternates
-    assert_eq!(p.local_color_at(point(2.0, 0.0, 0.0)), WHITE);
-    assert_eq!(p.local_color_at(point(3.0, 0.0, 0.0)), BLACK);
+    assert_eq!(p.shape_color_at(point(2.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.shape_color_at(point(3.0, 0.0, 0.0)), BLACK);
     assert_eq!(
-        p.local_color_at(point(3.0 / sq22, 0.0, 3.0 / sq22)),
+        p.shape_color_at(point(3.0 / sq22, 0.0, 3.0 / sq22)),
         color(0.5, 0.5, 0.5)
     );
 }
