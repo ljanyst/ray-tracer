@@ -11,18 +11,36 @@ use std::fmt;
 pub trait Pattern: fmt::Debug {
     fn transform(&mut self, transform: Matrix);
     fn current_transform(&self) -> &Matrix;
-    fn color_at(&self, shape: &Box<dyn Shape>, pt: Tuple) -> Tuple;
-    fn local_color_at(&self, pt: Tuple) -> Tuple;
+
+    /// Returns the color for a point in the worlds's frame of reference
+    ///
+    /// # Arguments
+    ///
+    /// * `pt_w` - A a point in the world's frame of reference
+    fn color_at(&self, shape: &Box<dyn Shape>, pt_w: Tuple) -> Tuple;
+
+    /// Returns the color for a point in the shape's frame of reference
+    ///
+    /// # Arguments
+    ///
+    /// * `pt_s` - A a point in the shape's frame of reference
+    fn shape_color_at(&self, pt_s: Tuple) -> Tuple;
+
     fn dyn_clone(&self) -> Box<dyn Pattern>;
     fn dyn_eq(&self, other: &Box<dyn Pattern>) -> bool;
     fn as_any(&self) -> &dyn Any;
 }
 
-pub trait LocalPattern: Clone + Copy {
-    fn local_color_at(&self, pt: Tuple) -> Tuple;
+pub trait LocalPattern: Clone {
+    /// Returns the color for a point in the pattern's frame of reference
+    ///
+    /// # Arguments
+    ///
+    /// * `pt_p` - A a point in the pattern's frame of reference
+    fn local_color_at(&self, pt_p: Tuple) -> Tuple;
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PatternImpl<T: LocalPattern> {
     transform: Matrix,
     transform_inv: Matrix,
@@ -61,13 +79,13 @@ where
     T: LocalPattern + fmt::Debug + PartialEq + Eq + 'static,
 {
     fn color_at(&self, shape: &Box<dyn Shape>, pt: Tuple) -> Tuple {
-        let pt_o = *shape.current_inverse_transform() * pt;
-        let pt_p = self.transform_inv * pt_o;
-        self.pattern.local_color_at(pt_p)
+        let pt_s = *shape.current_inverse_transform() * pt;
+        self.pattern.local_color_at(pt_s)
     }
 
-    fn local_color_at(&self, pt: Tuple) -> Tuple {
-        self.pattern.local_color_at(pt)
+    fn shape_color_at(&self, pt_o: Tuple) -> Tuple {
+        let pt_p = self.transform_inv * pt_o;
+        self.pattern.local_color_at(pt_p)
     }
 
     fn transform(&mut self, transform: Matrix) {
