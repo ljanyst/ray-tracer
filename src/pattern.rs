@@ -31,7 +31,7 @@ pub trait Pattern: fmt::Debug {
     fn as_any(&self) -> &dyn Any;
 }
 
-pub trait LocalPattern: Clone {
+pub trait LocalPattern: Clone + fmt::Debug + PartialEq + Eq {
     /// Returns the color for a point in the pattern's frame of reference
     ///
     /// # Arguments
@@ -76,11 +76,11 @@ where
 
 impl<T> Pattern for PatternImpl<T>
 where
-    T: LocalPattern + fmt::Debug + PartialEq + Eq + 'static,
+    T: LocalPattern + 'static,
 {
     fn color_at(&self, shape: &Box<dyn Shape>, pt: Tuple) -> Tuple {
         let pt_s = *shape.current_inverse_transform() * pt;
-        self.pattern.local_color_at(pt_s)
+        self.shape_color_at(pt_s)
     }
 
     fn shape_color_at(&self, pt_o: Tuple) -> Tuple {
