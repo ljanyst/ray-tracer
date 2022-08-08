@@ -1,3 +1,4 @@
+use ray_tracer::radial_gradient_pattern_unit;
 use ray_tracer::Tuple;
 use ray_tracer::{checker_pattern_unit, ring_pattern_unit};
 use ray_tracer::{color, gradient_pattern_unit, point, stripe_pattern_unit};
@@ -78,4 +79,27 @@ fn verify_checker_pattern() {
     assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
     assert_eq!(p.local_color_at(point(0.0, 0.0, 0.99)), WHITE);
     assert_eq!(p.local_color_at(point(0.0, 0.0, 1.01)), BLACK);
+}
+
+#[test]
+fn verify_radial_gradient_pattern() {
+    let p = radial_gradient_pattern_unit(WHITE, BLACK);
+    let sq22 = 2.0_f64.sqrt() * 2.0;
+
+    assert_eq!(p.local_color_at(point(0.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.local_color_at(point(1.0, 0.0, 0.0)), BLACK);
+    assert_eq!(p.local_color_at(point(0.0, 0.0, 1.0)), BLACK);
+
+    assert_eq!(
+        p.local_color_at(point(1.0 / sq22, 0.0, 1.0 / sq22)),
+        color(0.5, 0.5, 0.5)
+    );
+
+    // The pattern alternates
+    assert_eq!(p.local_color_at(point(2.0, 0.0, 0.0)), WHITE);
+    assert_eq!(p.local_color_at(point(3.0, 0.0, 0.0)), BLACK);
+    assert_eq!(
+        p.local_color_at(point(3.0 / sq22, 0.0, 3.0 / sq22)),
+        color(0.5, 0.5, 0.5)
+    );
 }
