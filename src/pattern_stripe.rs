@@ -3,32 +3,30 @@
 
 use crate::matrix::Matrix;
 use crate::pattern::{LocalPattern, Pattern, PatternImpl};
+use crate::pattern_boilerplate_2p;
+use crate::pattern_solid::solid_pattern;
 use crate::tuple::Tuple;
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct StripePattern {
-    color1: Tuple,
-    color2: Tuple,
+    pattern1: Box<dyn Pattern>,
+    pattern2: Box<dyn Pattern>,
 }
 
 impl LocalPattern for StripePattern {
     fn local_color_at(&self, pt: Tuple) -> Tuple {
+        let color1 = self.pattern1.shape_color_at(pt);
+        let color2 = self.pattern2.shape_color_at(pt);
         if pt.x().floor() as isize % 2 == 0 {
-            return self.color1;
+            return color1;
         }
-        self.color2
+        color2
     }
 }
 
-pub fn stripe_pattern_unit(color1: Tuple, color2: Tuple) -> Box<dyn Pattern> {
-    Box::new(PatternImpl::new(StripePattern {
-        color1: color1,
-        color2: color2,
-    }))
-}
-
-pub fn stripe_pattern(color1: Tuple, color2: Tuple, transform: Matrix) -> Box<dyn Pattern> {
-    let mut s = stripe_pattern_unit(color1, color2);
-    s.transform(transform);
-    s
-}
+pattern_boilerplate_2p!(
+    StripePattern,
+    stripe_pattern_unit,
+    stripe_pattern_color,
+    stripe_pattern
+);
