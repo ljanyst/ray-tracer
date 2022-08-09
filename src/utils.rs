@@ -44,7 +44,7 @@ macro_rules! pattern_boilerplate_2p {
 
         impl PartialEq for $cls {
             fn eq(&self, other: &Self) -> bool {
-                self.pattern1.eq(&other.pattern1) && self.pattern2.eq(&other.pattern2)
+                &self.pattern1 == &other.pattern1 && &self.pattern2 == &other.pattern2
             }
         }
 
