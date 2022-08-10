@@ -14,15 +14,9 @@ pub struct NoisePattern {
 
 impl LocalPattern for NoisePattern {
     fn local_color_at(&self, pt: Tuple) -> Tuple {
-        let nx = self
-            .noise
-            .octave_noise(pt + vector(100.0, 0.0, 0.0), 3, 0.5);
-        let ny = self
-            .noise
-            .octave_noise(pt + vector(0.0, 100.0, 0.0), 3, 0.5);
-        let nz = self
-            .noise
-            .octave_noise(pt + vector(0.0, 0.0, 100.0), 3, 0.5);
+        let nx = self.noise.octave_noise(pt + vector(10.0, 0.0, 0.0), 6, 0.5) * 0.5;
+        let ny = self.noise.octave_noise(pt + vector(0.0, 10.0, 0.0), 6, 0.5) * 0.5;
+        let nz = self.noise.octave_noise(pt + vector(0.0, 0.0, 10.0), 6, 0.5) * 0.5;
 
         let pt_noised = pt + vector(nx, ny, nz);
         self.pattern.shape_color_at(pt_noised)
