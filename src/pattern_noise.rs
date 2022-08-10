@@ -24,12 +24,16 @@ impl LocalPattern for NoisePattern {
 }
 
 pub fn noise_pattern(pattern: Box<dyn Pattern>, transform: Matrix) -> Box<dyn Pattern> {
-    let mut p = Box::new(PatternImpl::new(NoisePattern {
-        pattern: pattern,
-        noise: Noise::new(),
-    }));
+    let mut p = noise_pattern_unit(pattern);
     p.transform(transform);
     p
+}
+
+pub fn noise_pattern_unit(pattern: Box<dyn Pattern>) -> Box<dyn Pattern> {
+    Box::new(PatternImpl::new(NoisePattern {
+        pattern: pattern,
+        noise: Noise::new(),
+    }))
 }
 
 impl PartialEq for NoisePattern {
