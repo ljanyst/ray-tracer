@@ -18,7 +18,13 @@ impl LocalPattern for GradientPattern {
         let color1 = self.pattern1.shape_color_at(pt);
         let color2 = self.pattern2.shape_color_at(pt);
         let distance = color2 - color1;
-        let fraction = pt.x() - pt.x().floor();
+        let mut fraction = pt.x().abs();
+        while fraction >= 2.0 {
+            fraction -= 2.0;
+        }
+        if fraction > 1.0 {
+            return color1 + distance * (2.0 - fraction);
+        }
         color1 + distance * fraction
     }
 }
