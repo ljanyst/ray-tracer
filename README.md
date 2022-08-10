@@ -49,7 +49,7 @@ Description:
 [code](src/demo/demo7and8.rs)
 
 Chapter 8 Demo - Shadows
------------------------------------
+------------------------
 
 Description:
 
@@ -60,7 +60,7 @@ Description:
 [code](src/demo/demo7and8.rs)
 
 Chapter 9 Demo - Plane
------------------------------------
+----------------------
 
 Description:
 
