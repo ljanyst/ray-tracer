@@ -1,6 +1,7 @@
 // Copyright 2022 Lukasz Janyst <lukasz@jany.st>
 // Licensed under the MIT license, see the LICENSE file for details.
 
+use crate::demo::demo10::demo10;
 use crate::demo::demo5::demo5;
 use crate::demo::demo6::demo6;
 use crate::demo::demo7and8::demo7and8;
@@ -8,6 +9,7 @@ use crate::demo::demo9::demo9;
 use crate::demo::noise::noise;
 
 mod demo {
+    pub mod demo10;
     pub mod demo5;
     pub mod demo6;
     pub mod demo7and8;
@@ -24,6 +26,7 @@ pub fn main() {
     demos.insert("demo6", demo6);
     demos.insert("demo7and8", demo7and8);
     demos.insert("demo9", demo9);
+    demos.insert("demo10", demo10);
     demos.insert("noise", noise);
 
     let mut args: Vec<String> = env::args().collect();
