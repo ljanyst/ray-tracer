@@ -71,6 +71,17 @@ Description:
 
 [code](src/demo/demo9.rs)
 
+Chapter 10 Demo - Patterns
+--------------------------
+
+Description:
+
+ * add material patterns to the previous demo
+
+![Demo 10 rendering](demo-imgs/demo10.webp)
+
+[code](src/demo/demo10.rs)
+
 [rtc]: http://raytracerchallenge.com/
 [rust]: https://www.rust-lang.org/
 
