@@ -21,28 +21,38 @@ use std::collections::HashMap;
 use std::env;
 
 pub fn main() {
-    let mut demos = HashMap::<&str, fn()>::new();
-    demos.insert("demo5", demo5);
-    demos.insert("demo6", demo6);
-    demos.insert("demo7and8", demo7and8);
-    demos.insert("demo9", demo9);
-    demos.insert("demo10", demo10);
-    demos.insert("noise", noise);
+    let demos: Vec<(&str, fn())> = vec![
+        ("demo5", demo5),
+        ("demo6", demo6),
+        ("demo7and8", demo7and8),
+        ("demo9", demo9),
+        ("demo10", demo10),
+        ("noise", noise),
+    ];
 
     let mut args: Vec<String> = env::args().collect();
     args.remove(0);
-    if args.len() == 0 {
+    if args.is_empty() {
         println!("Available demos:");
-        let mut kx: Vec<&&str> = demos.keys().collect();
-        kx.sort();
-        for k in kx.iter() {
-            println!("{}", k);
+        for demo in demos.iter() {
+            println!("{}", demo.0);
         }
         return;
     }
 
+    if args.len() == 1 && args[0] == "all" {
+        for demo in demos.iter() {
+            demo.1();
+        }
+    }
+
+    let mut demos_map = HashMap::<&str, fn()>::new();
+    for demo in demos.iter() {
+        demos_map.insert(demo.0, demo.1);
+    }
+
     for arg in args.iter() {
-        match demos.get(arg.as_str()) {
+        match demos_map.get(arg.as_str()) {
             None => println!("No such demo: {}", arg),
             Some(func) => func(),
         }
