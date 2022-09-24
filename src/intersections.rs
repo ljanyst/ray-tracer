@@ -18,7 +18,7 @@ pub struct Intersection<'a> {
 
 impl<'a> Intersection<'a> {
     pub fn new(t: f64, shape: &Box<dyn Shape>) -> Intersection {
-        Intersection { t: t, shape: shape }
+        Intersection { t, shape }
     }
 
     pub fn t(&self) -> f64 {
@@ -43,10 +43,10 @@ impl<'a> Intersection<'a> {
         IntersectionProperties {
             t: self.t,
             shape: self.shape,
-            point: point,
-            eyev: eyev,
-            normalv: normalv,
-            inside: inside,
+            point,
+            eyev,
+            normalv,
+            inside,
             over_point: point + normalv * EPSILON,
         }
     }
@@ -111,7 +111,7 @@ impl<'a> Intersections<'a> {
     }
 
     pub fn from_vector(xs: Vec<Intersection>) -> Intersections {
-        Intersections { xs: xs }
+        Intersections { xs }
     }
 
     pub fn at(&self, i: usize) -> &Intersection {
@@ -132,6 +132,10 @@ impl<'a> Intersections<'a> {
         self.xs.len()
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.xs.is_empty()
+    }
+
     pub fn hit(&self) -> Option<Intersection> {
         let mut res = None;
         for x in self.xs.iter() {
@@ -145,7 +149,7 @@ impl<'a> Intersections<'a> {
 }
 
 pub fn intersect<'a>(shape: &'a Box<dyn Shape>, ray: &Ray) -> Vec<Intersection<'a>> {
-    let inx = shape.intersect(&ray);
+    let inx = shape.intersect(ray);
     let mut res = Vec::new();
 
     for x in inx.iter() {

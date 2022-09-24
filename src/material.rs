@@ -72,7 +72,7 @@ impl Material {
             diffuse = self.diffuse * ln_cos * effective_color;
 
             // Cosine between the light reflection vector and and the eve vector
-            let reflectedv = (-lightv).reflected(&normalv);
+            let reflectedv = (-lightv).reflected(normalv);
             let re_cos = reflectedv.dot(eyev);
 
             // Negative cosinus means the light reflects away from the eye

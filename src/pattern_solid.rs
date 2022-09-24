@@ -16,5 +16,5 @@ impl LocalPattern for SolidPattern {
 }
 
 pub fn solid_pattern(color: Tuple) -> Box<dyn Pattern> {
-    Box::new(PatternImpl::new(SolidPattern { color: color }))
+    Box::new(PatternImpl::new(SolidPattern { color }))
 }

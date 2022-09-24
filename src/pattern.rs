@@ -69,7 +69,7 @@ where
         PatternImpl {
             transform: Matrix::one(),
             transform_inv: Matrix::one(),
-            pattern: pattern,
+            pattern,
         }
     }
 }

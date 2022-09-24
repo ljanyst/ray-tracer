@@ -10,7 +10,7 @@ pub struct Light {
 
 pub fn point_light(position: Tuple, intensity: Tuple) -> Light {
     Light {
-        position: position,
-        intensity: intensity,
+        position,
+        intensity,
     }
 }

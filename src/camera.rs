@@ -21,9 +21,9 @@ pub struct Camera {
 impl Camera {
     pub fn new(hres: usize, vres: usize, fov: f64) -> Camera {
         let mut c = Camera {
-            hres: hres,
-            vres: vres,
-            fov: fov,
+            hres,
+            vres,
+            fov,
             transform: Matrix::one(),
             transform_inv: Matrix::one(),
             pixel_size: 0.0,

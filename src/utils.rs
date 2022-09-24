@@ -34,10 +34,7 @@ macro_rules! pattern_boilerplate_2p {
             pattern2: Box<dyn Pattern>,
             transform: Matrix,
         ) -> Box<dyn Pattern> {
-            let mut p = Box::new(PatternImpl::new($cls {
-                pattern1: pattern1,
-                pattern2: pattern2,
-            }));
+            let mut p = Box::new(PatternImpl::new($cls { pattern1, pattern2 }));
             p.transform(transform);
             p
         }

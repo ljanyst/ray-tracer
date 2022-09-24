@@ -39,7 +39,7 @@ where
             transform: Matrix::one(),
             transform_inv: Matrix::one(),
             material: Material::new(),
-            shape: shape,
+            shape,
         }
     }
 }

@@ -69,7 +69,7 @@ impl World {
             if self.shadows {
                 // we need to use a point slightly above our point along the normal to
                 // account for floating-point inaccuracies
-                shadowed = self.is_shadowed(&l, props.over_point);
+                shadowed = self.is_shadowed(l, props.over_point);
             }
 
             color = color
@@ -107,9 +107,6 @@ impl World {
         let xs = self.intersect(&r);
         let hit = xs.hit();
 
-        match hit {
-            Some(h) if h.t() < distance => true,
-            _ => false,
-        }
+        matches!(hit, Some(h) if h.t() < distance)
     }
 }

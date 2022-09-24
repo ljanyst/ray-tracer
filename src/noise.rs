@@ -34,7 +34,7 @@ impl Noise {
     }
 
     fn p(&self, mut i: usize) -> usize {
-        i = i % 255;
+        i %= 255;
         self.perms[i] as usize
     }
 
@@ -97,12 +97,12 @@ impl Noise {
             i += 1;
         }
 
-        return total / max_value;
+        total / max_value
     }
 }
 
 fn fade(t: f64) -> f64 {
-    return t * t * t * (t * (t * 6.0 - 15.0) + 10.0); // 6t^5 - 15t^4 + 10t^3
+    t * t * t * (t * (t * 6.0 - 15.0) + 10.0) // 6t^5 - 15t^4 + 10t^3
 }
 
 fn grad(hash: u8, x: f64, y: f64, z: f64) -> f64 {

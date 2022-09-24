@@ -12,10 +12,7 @@ pub struct Ray {
 
 impl Ray {
     pub fn new(origin: Tuple, direction: Tuple) -> Ray {
-        Ray {
-            origin: origin,
-            direction: direction,
-        }
+        Ray { origin, direction }
     }
 
     pub fn origin(&self) -> Tuple {

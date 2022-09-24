@@ -31,7 +31,7 @@ pub fn noise_pattern(pattern: Box<dyn Pattern>, transform: Matrix) -> Box<dyn Pa
 
 pub fn noise_pattern_unit(pattern: Box<dyn Pattern>) -> Box<dyn Pattern> {
     Box::new(PatternImpl::new(NoisePattern {
-        pattern: pattern,
+        pattern,
         noise: Noise::new(),
     }))
 }

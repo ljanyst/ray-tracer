@@ -126,7 +126,7 @@ impl Tuple {
             panic!("Normal must be a vector");
         }
 
-        *self - (2.0 * self.dot(&normal)) * *normal
+        *self - (2.0 * self.dot(normal)) * *normal
     }
 }
 

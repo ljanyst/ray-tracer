@@ -14,8 +14,8 @@ pub struct Canvas {
 impl Canvas {
     pub fn new(width: usize, height: usize) -> Canvas {
         let mut c = Canvas {
-            width: width,
-            height: height,
+            width,
+            height,
             data: Vec::new(),
         };
         let mut col = Vec::new();
@@ -73,9 +73,9 @@ impl Canvas {
                 ppm = add_pixel_data(ppm, &mut row, pixel.g());
                 ppm = add_pixel_data(ppm, &mut row, pixel.b());
             }
-            if row.len() != 0 {
+            if !row.is_empty() {
                 ppm.push_str(row.as_str());
-                ppm.push_str("\n");
+                ppm.push('\n');
             }
         }
         ppm
@@ -92,12 +92,12 @@ fn add_pixel_data(mut ppm: String, row: &mut String, color: f64) -> String {
 
     if row.len() + 1 + c.len() > 70 {
         ppm.push_str(row.as_str());
-        ppm.push_str("\n");
+        ppm.push('\n');
         row.clear();
     }
 
-    if row.len() != 0 {
-        row.push_str(" ");
+    if !row.is_empty() {
+        row.push(' ');
     }
     row.push_str(c.as_str());
 
