@@ -17,7 +17,7 @@ pub trait Pattern: fmt::Debug {
     /// # Arguments
     ///
     /// * `pt_w` - A a point in the world's frame of reference
-    fn color_at(&self, shape: &Box<dyn Shape>, pt_w: Tuple) -> Tuple;
+    fn color_at(&self, shape: &dyn Shape, pt_w: Tuple) -> Tuple;
 
     /// Returns the color for a point in the shape's frame of reference
     ///
@@ -78,7 +78,7 @@ impl<T> Pattern for PatternImpl<T>
 where
     T: LocalPattern + 'static,
 {
-    fn color_at(&self, shape: &Box<dyn Shape>, pt: Tuple) -> Tuple {
+    fn color_at(&self, shape: &dyn Shape, pt: Tuple) -> Tuple {
         let pt_s = *shape.current_inverse_transform() * pt;
         self.shape_color_at(pt_s)
     }

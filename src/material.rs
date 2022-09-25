@@ -34,7 +34,7 @@ impl Material {
     /// Shade the material according to the Phong reflection model
     pub fn lighting(
         &self,
-        shape: &Box<dyn Shape>,
+        shape: &dyn Shape,
         light: &Light,
         pt: &Tuple,
         eyev: &Tuple,

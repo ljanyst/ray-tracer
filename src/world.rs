@@ -54,7 +54,7 @@ impl World {
         let mut xs = Intersections::new();
 
         for s in self.shapes.iter() {
-            let s_xs = intersect(s, ray);
+            let s_xs = intersect(s.as_ref(), ray);
             xs.append(s_xs);
         }
 

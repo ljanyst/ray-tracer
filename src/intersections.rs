@@ -13,11 +13,11 @@ use std::fmt;
 #[derive(Copy, Clone)]
 pub struct Intersection<'a> {
     t: f64,
-    shape: &'a Box<dyn Shape>,
+    shape: &'a dyn Shape,
 }
 
 impl<'a> Intersection<'a> {
-    pub fn new(t: f64, shape: &Box<dyn Shape>) -> Intersection {
+    pub fn new(t: f64, shape: &dyn Shape) -> Intersection {
         Intersection { t, shape }
     }
 
@@ -25,7 +25,7 @@ impl<'a> Intersection<'a> {
         self.t
     }
 
-    pub fn shape(&self) -> &Box<dyn Shape> {
+    pub fn shape(&self) -> &dyn Shape {
         self.shape
     }
 
@@ -66,7 +66,7 @@ impl<'a> PartialEq for Intersection<'a> {
 
 impl<'a> fmt::Debug for Intersection<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let ptr: *const dyn Shape = self.shape.as_ref();
+        let ptr: *const dyn Shape = self.shape;
         f.debug_struct("Intersection")
             .field("t", &self.t)
             .field("shape", &ptr)
@@ -78,7 +78,7 @@ impl<'a> Eq for Intersection<'a> {}
 
 pub struct IntersectionProperties<'a> {
     pub t: f64,
-    pub shape: &'a Box<dyn Shape>,
+    pub shape: &'a dyn Shape,
     pub point: Tuple,
     pub eyev: Tuple,
     pub normalv: Tuple,
@@ -88,7 +88,7 @@ pub struct IntersectionProperties<'a> {
 
 impl<'a> fmt::Debug for IntersectionProperties<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let ptr: *const dyn Shape = self.shape.as_ref();
+        let ptr = self.shape as *const dyn Shape;
         f.debug_struct("IntersectionProperties")
             .field("t", &self.t)
             .field("shape", &ptr)
@@ -148,7 +148,7 @@ impl<'a> Intersections<'a> {
     }
 }
 
-pub fn intersect<'a>(shape: &'a Box<dyn Shape>, ray: &Ray) -> Vec<Intersection<'a>> {
+pub fn intersect<'a>(shape: &'a dyn Shape, ray: &Ray) -> Vec<Intersection<'a>> {
     let inx = shape.intersect(ray);
     let mut res = Vec::new();
 
