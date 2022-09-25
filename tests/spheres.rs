@@ -2,25 +2,25 @@ use ray_tracer::{feq, intersect, peq, point, vector, Ray};
 use ray_tracer::{rotation_z, scaling, translation, Material, Matrix};
 use ray_tracer::{sphere, sphere_unit};
 
-use std::f64::consts::PI;
+use std::f64::consts::{FRAC_1_SQRT_2, PI};
 
 #[test]
 fn intersect_ray_and_sphere() {
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
     let s = sphere_unit();
-    let xs = intersect(&s, &r);
+    let xs = intersect(s.as_ref(), &r);
     assert_eq!(xs.len(), 2);
     assert!(feq(xs[0].t(), 4.0));
-    assert!(peq(xs[0].shape(), &s));
+    assert!(peq(xs[0].shape(), s.as_ref()));
     assert!(feq(xs[1].t(), 6.0));
-    assert!(peq(xs[1].shape(), &s));
+    assert!(peq(xs[1].shape(), s.as_ref()));
 }
 
 #[test]
 fn intersect_ray_and_sphere_at_tangent() {
     let r = Ray::new(point(0.0, 1.0, -5.0), vector(0.0, 0.0, 1.0));
     let s = sphere_unit();
-    let xs = intersect(&s, &r);
+    let xs = intersect(s.as_ref(), &r);
     assert_eq!(xs.len(), 2);
     assert!(feq(xs[0].t(), 5.0));
     assert!(feq(xs[1].t(), 5.0));
@@ -30,7 +30,7 @@ fn intersect_ray_and_sphere_at_tangent() {
 fn intersect_ray_and_sphere_no_intersection() {
     let r = Ray::new(point(0.0, 2.0, -5.0), vector(0.0, 0.0, 1.0));
     let s = sphere_unit();
-    let xs = intersect(&s, &r);
+    let xs = intersect(s.as_ref(), &r);
     assert_eq!(xs.len(), 0);
 }
 
@@ -38,7 +38,7 @@ fn intersect_ray_and_sphere_no_intersection() {
 fn intersect_ray_and_sphere_origin_inside() {
     let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
     let s = sphere_unit();
-    let xs = intersect(&s, &r);
+    let xs = intersect(s.as_ref(), &r);
     assert_eq!(xs.len(), 2);
     assert!(feq(xs[0].t(), -1.0));
     assert!(feq(xs[1].t(), 1.0));
@@ -48,7 +48,7 @@ fn intersect_ray_and_sphere_origin_inside() {
 fn intersect_ray_and_sphere_behind() {
     let r = Ray::new(point(0.0, 0.0, 5.0), vector(0.0, 0.0, 1.0));
     let s = sphere_unit();
-    let xs = intersect(&s, &r);
+    let xs = intersect(s.as_ref(), &r);
     assert_eq!(xs.len(), 2);
     assert!(feq(xs[0].t(), -6.0));
     assert!(feq(xs[1].t(), -4.0));
@@ -73,7 +73,7 @@ fn intersect_ray_and_scaled_sphere() {
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
     let mut s = sphere_unit();
     s.transform(scaling(2.0, 2.0, 2.0));
-    let xs = intersect(&s, &r);
+    let xs = intersect(s.as_ref(), &r);
     assert_eq!(xs.len(), 2);
     assert!(feq(xs[0].t(), 3.0));
     assert!(feq(xs[1].t(), 7.0));
@@ -84,7 +84,7 @@ fn intersect_ray_and_translated_sphere() {
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
     let mut s = sphere_unit();
     s.transform(translation(5.0, 0.0, 0.0));
-    let xs = intersect(&s, &r);
+    let xs = intersect(s.as_ref(), &r);
     assert_eq!(xs.len(), 0);
 }
 
@@ -104,8 +104,8 @@ fn compute_unit_sphere_normal() {
 fn compute_translated_sphere_normal() {
     let s = sphere(translation(0.0, 1.0, 0.0));
     assert_eq!(
-        s.normal_at(point(0.0, 1.70711, -0.70711)),
-        vector(0.0, 0.70711, -0.70711)
+        s.normal_at(point(0.0, 1.70711, -FRAC_1_SQRT_2)),
+        vector(0.0, FRAC_1_SQRT_2, -FRAC_1_SQRT_2)
     );
 }
 

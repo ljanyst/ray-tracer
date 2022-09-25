@@ -24,7 +24,7 @@ fn set_canvas_pixels() {
 fn construct_ppm_header() {
     let c = Canvas::new(5, 3);
     let ppm = c.ppm();
-    let lines: Vec<&str> = ppm.split("\n").collect();
+    let lines: Vec<&str> = ppm.split('\n').collect();
     assert_eq!(lines[0], "P3");
     assert_eq!(lines[1], "5 3");
     assert_eq!(lines[2], "255");
@@ -42,7 +42,7 @@ fn construct_ppm_pixel_data() {
     c.set(4, 2, &p3);
 
     let ppm = c.ppm();
-    let lines: Vec<&str> = ppm.split("\n").collect();
+    let lines: Vec<&str> = ppm.split('\n').collect();
     assert_eq!(lines[3], "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0");
     assert_eq!(lines[4], "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0");
     assert_eq!(lines[5], "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255");
@@ -58,7 +58,7 @@ fn split_ppm_lines() {
         }
     }
     let ppm = c.ppm();
-    let lines: Vec<&str> = ppm.split("\n").collect();
+    let lines: Vec<&str> = ppm.split('\n').collect();
     assert_eq!(
         lines[3],
         "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204"

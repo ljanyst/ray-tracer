@@ -17,7 +17,7 @@ fn compute_plane_normal() {
 fn incersect_ray_and_plane_parallel() {
     let r = Ray::new(point(0.0, 10.0, 0.0), vector(0.0, 0.0, 1.0));
     let p = plane_unit();
-    let xs = intersect(&p, &r);
+    let xs = intersect(p.as_ref(), &r);
     assert_eq!(xs.len(), 0);
 }
 
@@ -25,7 +25,7 @@ fn incersect_ray_and_plane_parallel() {
 fn incersect_ray_and_plane_coplanar() {
     let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
     let p = plane_unit();
-    let xs = intersect(&p, &r);
+    let xs = intersect(p.as_ref(), &r);
     assert_eq!(xs.len(), 0);
 }
 
@@ -33,18 +33,18 @@ fn incersect_ray_and_plane_coplanar() {
 fn incersect_ray_above_and_plane() {
     let r = Ray::new(point(0.0, 1.0, 0.0), vector(0.0, -1.0, 0.0));
     let p = plane_unit();
-    let xs = intersect(&p, &r);
+    let xs = intersect(p.as_ref(), &r);
     assert_eq!(xs.len(), 1);
     assert!(feq(xs[0].t(), 1.0));
-    assert!(peq(xs[0].shape(), &p));
+    assert!(peq(xs[0].shape(), p.as_ref()));
 }
 
 #[test]
 fn incersect_ray_below_and_plane() {
     let r = Ray::new(point(0.0, -1.0, 0.0), vector(0.0, 1.0, 0.0));
     let p = plane_unit();
-    let xs = intersect(&p, &r);
+    let xs = intersect(p.as_ref(), &r);
     assert_eq!(xs.len(), 1);
     assert!(feq(xs[0].t(), 1.0));
-    assert!(peq(xs[0].shape(), &p));
+    assert!(peq(xs[0].shape(), p.as_ref()));
 }

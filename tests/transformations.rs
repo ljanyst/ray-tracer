@@ -71,7 +71,7 @@ fn apply_inverse_rotation_x_matrix_to_point() {
     let half_qarter = rotation_x(PI / 4.0);
     assert_eq!(
         half_qarter.inverted() * p,
-        point(0.0, 2.0_f64.sqrt() / 2.0, -2.0_f64.sqrt() / 2.0)
+        point(0.0, 2.0_f64.sqrt() / 2.0, -(2.0_f64.sqrt()) / 2.0)
     );
 }
 
@@ -94,7 +94,7 @@ fn apply_rotation_z_matrix_to_point() {
     let full_qarter = rotation_z(PI / 2.0);
     assert_eq!(
         half_qarter * p,
-        point(-2.0_f64.sqrt() / 2.0, 2.0_f64.sqrt() / 2.0, 0.0)
+        point(-(2.0_f64.sqrt()) / 2.0, 2.0_f64.sqrt() / 2.0, 0.0)
     );
     assert_eq!(full_qarter * p, point(-1.0, 0.0, 0.0));
 }
