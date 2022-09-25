@@ -20,8 +20,8 @@ pub fn noise() {
     let mut t = -1.0_f64;
     while t <= 1.0 {
         let r = n.octave_noise(point(t, t, t), 6, 0.5);
-        write!(output, "{} {}\n", t, r).unwrap();
-        t = t + 0.01;
+        writeln!(output, "{} {}", t, r).unwrap();
+        t += 0.01;
     }
 
     let elapsed = now.elapsed();

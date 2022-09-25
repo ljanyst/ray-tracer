@@ -24,8 +24,8 @@ pub fn demo5() {
             let ray_target = point(cx, cy, cz);
             let ray_direction = (ray_target - ray_origin).normalized();
             let ray = Ray::new(ray_origin, ray_direction);
-            let xs = intersect(&sphere, &ray);
-            if xs.len() == 0 {
+            let xs = intersect(sphere.as_ref(), &ray);
+            if xs.is_empty() {
                 canvas.set(i, j, &color(0.0, 0.0, 0.0));
             } else {
                 canvas.set(i, j, &color(1.0, 0.0, 0.0));

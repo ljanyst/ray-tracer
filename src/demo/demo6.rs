@@ -30,7 +30,7 @@ pub fn demo6() {
             let ray_target = point(cx, cy, cz);
             let ray_direction = (ray_target - ray_origin).normalized();
             let ray = Ray::new(ray_origin, ray_direction);
-            let xs = Intersections::from_vector(intersect(&sphere, &ray));
+            let xs = Intersections::from_vector(intersect(sphere.as_ref(), &ray));
             let hit = xs.hit();
             if hit == None {
                 canvas.set(i, j, &color(0.0, 0.0, 0.0));
@@ -39,10 +39,14 @@ pub fn demo6() {
                 let point = ray.position(hit.t());
                 let normalv = hit.shape().normal_at(point);
                 let eyev = -ray.direction();
-                let c = hit
-                    .shape()
-                    .material()
-                    .lighting(&sphere, &light, &point, &eyev, &normalv, false);
+                let c = hit.shape().material().lighting(
+                    sphere.as_ref(),
+                    &light,
+                    &point,
+                    &eyev,
+                    &normalv,
+                    false,
+                );
                 canvas.set(i, j, &c);
             }
         }
