@@ -27,7 +27,7 @@ pub trait Pattern: fmt::Debug {
     fn shape_color_at(&self, pt_s: Tuple) -> Tuple;
 
     fn dyn_clone(&self) -> Box<dyn Pattern>;
-    fn dyn_eq(&self, other: &Box<dyn Pattern>) -> bool;
+    fn dyn_eq(&self, other: &dyn Pattern) -> bool;
     fn as_any(&self) -> &dyn Any;
 }
 
@@ -55,7 +55,7 @@ impl Clone for Box<dyn Pattern> {
 
 impl PartialEq for Box<dyn Pattern> {
     fn eq(&self, other: &Self) -> bool {
-        self.dyn_eq(other)
+        self.dyn_eq(other.as_ref())
     }
 }
 
@@ -101,7 +101,7 @@ where
         Box::new(self.clone())
     }
 
-    fn dyn_eq(&self, other: &Box<dyn Pattern>) -> bool {
+    fn dyn_eq(&self, other: &dyn Pattern) -> bool {
         match other.as_any().downcast_ref::<Self>() {
             None => false,
             Some(other) => self == other,

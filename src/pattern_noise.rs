@@ -38,7 +38,7 @@ pub fn noise_pattern_unit(pattern: Box<dyn Pattern>) -> Box<dyn Pattern> {
 
 impl PartialEq for NoisePattern {
     fn eq(&self, other: &Self) -> bool {
-        self.pattern.dyn_eq(&other.pattern)
+        self.pattern.dyn_eq(other.pattern.as_ref())
     }
 }
 
