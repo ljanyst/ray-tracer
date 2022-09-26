@@ -1,7 +1,7 @@
 // Copyright 2022 Lukasz Janyst <lukasz@jany.st>
 // Licensed under the MIT license, see the LICENSE file for details.
 
-use crate::matrix::Matrix;
+use crate::matrix::{Matrix, MatrixBuilder};
 use crate::tuple::Tuple;
 
 pub fn translation(x: f64, y: f64, z: f64) -> Matrix {
@@ -65,27 +65,11 @@ pub fn view_transform(from: Tuple, to: Tuple, up: Tuple) -> Matrix {
     let forward = (to - from).normalized();
     let left = forward.cross(&up.normalized());
     let true_up = left.cross(&forward);
-    Matrix::new(
-        // 0
-        left.x(),
-        left.y(),
-        left.z(),
-        0.0,
-        // 1
-        true_up.x(),
-        true_up.y(),
-        true_up.z(),
-        0.0,
-        // 2
-        -forward.x(),
-        -forward.y(),
-        -forward.z(),
-        0.0,
-        // 3
-        0.0,
-        0.0,
-        0.0,
-        1.0,
-        //
-    ) * translation(-from.x(), -from.y(), -from.z())
+    MatrixBuilder::new(4)
+        .row(&[left.x(), left.y(), left.z(), 0.0])
+        .row(&[true_up.x(), true_up.y(), true_up.z(), 0.0])
+        .row(&[-forward.x(), -forward.y(), -forward.z(), 0.0])
+        .row(&[0.0, 0.0, 0.0, 1.0])
+        .matrix()
+        * translation(-from.x(), -from.y(), -from.z())
 }
