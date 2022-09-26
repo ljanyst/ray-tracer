@@ -1,6 +1,6 @@
 use ray_tracer::{point, scaling, shearing, translation, vector};
 use ray_tracer::{rotation_x, rotation_y, rotation_z};
-use ray_tracer::{view_transform, Matrix};
+use ray_tracer::{view_transform, Matrix, MatrixBuilder};
 
 use std::f64::consts::PI;
 
@@ -168,11 +168,11 @@ fn transform_view_arbitrary() {
     let up = vector(1.0, 1.0, 0.0);
     assert_eq!(
         view_transform(from, to, up),
-        Matrix::new(
-            -0.50709, 0.50709, 0.67612, -2.36643, //
-            0.76772, 0.60609, 0.12122, -2.82843, //
-            -0.35857, 0.59761, -0.71714, 0.00000, //
-            0.00000, 0.00000, 0.00000, 1.00000 //
-        )
+        MatrixBuilder::new(4)
+            .row(&[-0.50709, 0.50709, 0.67612, -2.36643])
+            .row(&[0.76772, 0.60609, 0.12122, -2.8284])
+            .row(&[-0.35857, 0.59761, -0.71714, 0.00000])
+            .row(&[0.00000, 0.00000, 0.00000, 1.00000])
+            .matrix()
     );
 }
