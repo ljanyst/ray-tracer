@@ -6,7 +6,7 @@ use crate::utils::feq;
 use std::cmp::{Eq, PartialEq};
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, Default)]
 pub struct Tuple {
     data: [f64; 4],
 }

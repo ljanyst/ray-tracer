@@ -9,7 +9,7 @@ use crate::Shape;
 
 use std::cmp::{Eq, PartialEq};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct Material {
     pub color: Tuple,
     pub pattern: Option<Box<dyn Pattern>>,

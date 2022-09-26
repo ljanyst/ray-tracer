@@ -3,7 +3,7 @@
 
 use crate::tuple::Tuple;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct Noise {
     perms: Vec<u8>,
 }

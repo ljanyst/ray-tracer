@@ -101,6 +101,7 @@ impl<'a> fmt::Debug for IntersectionProperties<'a> {
     }
 }
 
+#[derive(Default)]
 pub struct Intersections<'a> {
     xs: Vec<Intersection<'a>>,
 }
