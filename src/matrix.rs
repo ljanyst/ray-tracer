@@ -7,6 +7,55 @@ use crate::tuple::Tuple;
 use std::cmp::{Eq, PartialEq};
 use std::ops::Mul;
 
+pub struct MatrixBuilder {
+    current_row: usize,
+    size: usize,
+    data: [f64; 16],
+}
+
+impl MatrixBuilder {
+    pub fn new(size: usize) -> MatrixBuilder {
+        Self {
+            current_row: 0,
+            size,
+            data: [0.0; 16],
+        }
+    }
+
+    pub fn row(&mut self, args: &[f64]) -> &mut Self {
+        if self.current_row == self.size {
+            panic!(
+                "Attempting to add row %{} to a matrix of size %{}",
+                self.current_row, self.size
+            );
+        }
+
+        if args.len() != self.size {
+            panic!(
+                "Attempting to add row of length ?{} to a matrix of size %{}",
+                args.len(),
+                self.size
+            );
+        }
+
+        for (i, d) in args.iter().enumerate() {
+            self.data[idx(self.current_row, i)] = *d;
+        }
+        self.current_row += 1;
+        self
+    }
+
+    pub fn matrix(&mut self) -> Matrix {
+        if self.current_row != self.size {
+            panic!(
+                "Initialized only %{} out of %{} Matrix rows",
+                self.current_row, self.size
+            )
+        }
+        Matrix::new(self.size, self.data)
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct Matrix {
     size: usize,
@@ -14,78 +63,14 @@ pub struct Matrix {
 }
 
 impl Matrix {
-    pub fn new(
-        m00: f64,
-        m01: f64,
-        m02: f64,
-        m03: f64,
-        m10: f64,
-        m11: f64,
-        m12: f64,
-        m13: f64,
-        m20: f64,
-        m21: f64,
-        m22: f64,
-        m23: f64,
-        m30: f64,
-        m31: f64,
-        m32: f64,
-        m33: f64,
-    ) -> Matrix {
-        Self {
-            size: 4,
-            data: [
-                m00, m01, m02, m03, //
-                m10, m11, m12, m13, //
-                m20, m21, m22, m23, //
-                m30, m31, m32, m33, //
-            ],
-        }
-    }
-
-    pub fn new2(m00: f64, m01: f64, m10: f64, m11: f64) -> Matrix {
-        Self {
-            size: 2,
-            data: [
-                m00, m01, 0.0, 0.0, //
-                m10, m11, 0.0, 0.0, //
-                0.0, 0.0, 0.0, 0.0, //
-                0.0, 0.0, 0.0, 0.0, //
-            ],
-        }
-    }
-
-    pub fn new3(
-        m00: f64,
-        m01: f64,
-        m02: f64,
-        m10: f64,
-        m11: f64,
-        m12: f64,
-        m20: f64,
-        m21: f64,
-        m22: f64,
-    ) -> Matrix {
-        Self {
-            size: 3,
-            data: [
-                m00, m01, m02, 0.0, //
-                m10, m11, m12, 0.0, //
-                m20, m21, m22, 0.0, //
-                0.0, 0.0, 0.0, 0.0, //
-            ],
-        }
+    pub fn new(size: usize, data: [f64; 16]) -> Matrix {
+        Self { size, data }
     }
 
     pub fn zero() -> Matrix {
         Self {
             size: 4,
-            data: [
-                0.0, 0.0, 0.0, 0.0, //
-                0.0, 0.0, 0.0, 0.0, //
-                0.0, 0.0, 0.0, 0.0, //
-                0.0, 0.0, 0.0, 0.0, //
-            ],
+            data: [0.0; 16],
         }
     }
 
