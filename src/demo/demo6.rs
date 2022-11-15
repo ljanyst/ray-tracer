@@ -32,10 +32,7 @@ pub fn demo6() {
             let ray = Ray::new(ray_origin, ray_direction);
             let xs = Intersections::from_vector(intersect(sphere.as_ref(), &ray));
             let hit = xs.hit();
-            if hit == None {
-                canvas.set(i, j, &color(0.0, 0.0, 0.0));
-            } else {
-                let hit = hit.unwrap();
+            if let Some(hit) = hit {
                 let point = ray.position(hit.t());
                 let normalv = hit.shape().normal_at(point);
                 let eyev = -ray.direction();
@@ -48,6 +45,8 @@ pub fn demo6() {
                     false,
                 );
                 canvas.set(i, j, &c);
+            } else {
+                canvas.set(i, j, &color(0.0, 0.0, 0.0));
             }
         }
     }
