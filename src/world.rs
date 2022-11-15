@@ -89,7 +89,7 @@ impl World {
         let xs = self.intersect(ray);
         let hit = xs.hit();
 
-        if hit == None {
+        if hit.is_none() {
             return Tuple::zero_color();
         }
 
