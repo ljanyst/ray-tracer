@@ -48,6 +48,7 @@ impl<'a> Intersection<'a> {
             normalv,
             inside,
             over_point: point + normalv * EPSILON,
+            reflectv: ray.direction().reflected(&normalv),
         }
     }
 }
@@ -84,6 +85,7 @@ pub struct IntersectionProperties<'a> {
     pub normalv: Tuple,
     pub inside: bool,
     pub over_point: Tuple,
+    pub reflectv: Tuple,
 }
 
 impl<'a> fmt::Debug for IntersectionProperties<'a> {
