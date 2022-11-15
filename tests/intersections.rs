@@ -1,5 +1,7 @@
-use ray_tracer::{feq, intersect, peq, point, sphere, sphere_unit, vector, Ray};
-use ray_tracer::{translation, Intersection, Intersections, EPSILON};
+use ray_tracer::{
+    feq, intersect, peq, plane_unit, point, sphere, sphere_unit, translation, vector, Intersection,
+    Intersections, Ray, EPSILON,
+};
 
 #[test]
 fn create_intersection() {
@@ -124,4 +126,14 @@ fn compute_intersection_properties_overpoint() {
     let p = i.properties(&r);
     assert!(p.over_point.z() < -EPSILON / 2.0);
     assert!(p.point.z() > p.over_point.z());
+}
+
+#[test]
+fn compute_intersection_properties_reflection_vector() {
+    let sq22 = 2.0_f64.sqrt() / 2.0;
+    let r = Ray::new(point(0.0, 0.1, -1.0), vector(0.0, -sq22, sq22));
+    let p = plane_unit();
+    let i = Intersection::new(2.0_f64.sqrt(), p.as_ref());
+    let p = i.properties(&r);
+    assert_eq!(p.reflectv, vector(0.0, sq22, sq22));
 }
