@@ -90,7 +90,7 @@ impl Camera {
         for x in 0..self.hres {
             for y in 0..self.vres {
                 let ray = self.ray_for_pixel(x, y);
-                let color = world.color_at(&ray);
+                let color = world.color_at(&ray, 5);
                 img.set(x, y, &color);
             }
         }
