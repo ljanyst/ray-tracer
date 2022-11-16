@@ -82,6 +82,17 @@ Description:
 
 [code](src/demo/demo10.rs)
 
+Chapter 11 Demo - Reflections and Refratcions
+---------------------------------------------
+
+Description:
+
+ * build a world with reflective walls and a ball inside
+
+![Demo 11 reflection_rendering](demo-imgs/demo11-reflection.webp)
+
+[code](src/demo/demo11.rs)
+
 [rtc]: http://raytracerchallenge.com/
 [rust]: https://www.rust-lang.org/
 
