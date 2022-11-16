@@ -85,6 +85,15 @@ impl World {
         color
     }
 
+    pub fn reflected_color(&self, props: IntersectionProperties) -> Tuple {
+        if props.shape.material().reflective == 0.0 {
+            return Tuple::zero_color();
+        }
+
+        let reflected_ray = Ray::new(props.over_point, props.reflectv);
+        props.shape.material().reflective * self.color_at(&reflected_ray)
+    }
+
     pub fn color_at(&self, ray: &Ray) -> Tuple {
         let xs = self.intersect(ray);
         let hit = xs.hit();
