@@ -61,7 +61,7 @@ impl World {
         xs
     }
 
-    pub fn shade_hit(&self, props: IntersectionProperties) -> Tuple {
+    pub fn shade_hit(&self, props: IntersectionProperties, _depth: u8) -> Tuple {
         let mut color = Tuple::zero_color();
         for l in self.lights.iter() {
             let mut shadowed = false;
@@ -85,16 +85,16 @@ impl World {
         color
     }
 
-    pub fn reflected_color(&self, props: IntersectionProperties) -> Tuple {
-        if props.shape.material().reflective == 0.0 {
+    pub fn reflected_color(&self, props: IntersectionProperties, depth: u8) -> Tuple {
+        if props.shape.material().reflective == 0.0 || depth == 0 {
             return Tuple::zero_color();
         }
 
         let reflected_ray = Ray::new(props.over_point, props.reflectv);
-        props.shape.material().reflective * self.color_at(&reflected_ray)
+        props.shape.material().reflective * self.color_at(&reflected_ray, depth - 1)
     }
 
-    pub fn color_at(&self, ray: &Ray) -> Tuple {
+    pub fn color_at(&self, ray: &Ray, depth: u8) -> Tuple {
         let xs = self.intersect(ray);
         let hit = xs.hit();
 
@@ -104,7 +104,7 @@ impl World {
 
         let h = hit.unwrap();
         let props = h.properties(ray);
-        self.shade_hit(props)
+        self.shade_hit(props, depth)
     }
 
     pub fn is_shadowed(&self, light: &Light, pt: Tuple) -> bool {
