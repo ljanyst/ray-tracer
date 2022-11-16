@@ -1,5 +1,9 @@
-use ray_tracer::{color, feq, point, point_light, vector, Intersection, Ray, World};
-use ray_tracer::{sphere, sphere_unit, translation};
+use ray_tracer::{
+    color, feq, plane, point, point_light, sphere, sphere_unit, translation, vector, Intersection,
+    Material, Ray, World,
+};
+
+use std::f64::consts::{FRAC_1_SQRT_2, SQRT_2};
 
 #[test]
 fn intersect_ray_with_world() {
@@ -93,4 +97,37 @@ fn shade_hit_in_shadow() {
     let p = i.properties(&r);
     let c = w.shade_hit(p);
     assert_eq!(c, color(0.1, 0.1, 0.1));
+}
+
+#[test]
+fn reflected_color_nonreflective_material() {
+    let mut w = World::default();
+    let mut m1 = w.shapes[1].material().clone();
+    m1.ambient = 1.0;
+    w.shapes[1].set_material(&m1);
+
+    let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
+    let i = Intersection::new(1.0, w.shapes[1].as_ref());
+    let p = i.properties(&r);
+    let c = w.reflected_color(p);
+    assert_eq!(c, color(0.0, 0.0, 0.0));
+}
+
+#[test]
+fn reflected_color_reflective_material() {
+    let mut w = World::default();
+    let mut p = plane(translation(0.0, -1.0, 0.0));
+    let mut m = Material::new();
+    m.reflective = 0.5;
+    p.set_material(&m);
+    w.shapes.push(p);
+
+    let r = Ray::new(
+        point(0.0, 0.0, -3.0),
+        vector(0.0, -FRAC_1_SQRT_2, FRAC_1_SQRT_2),
+    );
+    let i = Intersection::new(SQRT_2, w.shapes[2].as_ref());
+    let p = i.properties(&r);
+    let c = w.reflected_color(p);
+    assert_eq!(c, color(0.19032, 0.2379, 0.14274));
 }
