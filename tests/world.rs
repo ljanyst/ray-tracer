@@ -131,3 +131,63 @@ fn reflected_color_reflective_material() {
     let c = w.reflected_color(p, 5);
     assert_eq!(c, color(0.19032, 0.2379, 0.14274));
 }
+
+#[test]
+fn shade_hit_wits_a_reflective_material() {
+    let mut w = World::default();
+    let mut p = plane(translation(0.0, -1.0, 0.0));
+    let mut m = Material::new();
+    m.reflective = 0.5;
+    p.set_material(&m);
+    w.shapes.push(p);
+
+    let r = Ray::new(
+        point(0.0, 0.0, -3.0),
+        vector(0.0, -FRAC_1_SQRT_2, FRAC_1_SQRT_2),
+    );
+    let i = Intersection::new(SQRT_2, w.shapes[2].as_ref());
+    let p = i.properties(&r);
+    let c = w.shade_hit(p, 5);
+    assert_eq!(c, color(0.87677, 0.92436, 0.82918));
+}
+
+#[test]
+fn reflected_color_maximum_recursion() {
+    let mut w = World::default();
+    let mut p = plane(translation(0.0, -1.0, 0.0));
+    let mut m = Material::new();
+    m.reflective = 0.5;
+    p.set_material(&m);
+    w.shapes.push(p);
+
+    let r = Ray::new(
+        point(0.0, 0.0, -3.0),
+        vector(0.0, -FRAC_1_SQRT_2, FRAC_1_SQRT_2),
+    );
+    let i = Intersection::new(SQRT_2, w.shapes[2].as_ref());
+    let p = i.properties(&r);
+    let c = w.reflected_color(p, 0);
+    assert_eq!(c, color(0.0, 0.0, 0.0));
+}
+
+#[test]
+fn color_at_two_paralel_mirrors() {
+    let mut w = World::empty();
+    let l = point_light(point(0.0, 0.0, 0.0), color(1.0, 1.0, 1.0));
+    w.lights.push(l);
+
+    let mut lower = plane(translation(0.0, -1.0, 0.0));
+    let mut m1 = Material::new();
+    m1.reflective = 1.0;
+    lower.set_material(&m1);
+    w.shapes.push(lower);
+
+    let mut upper = plane(translation(0.0, 1.0, 0.0));
+    let mut m2 = Material::new();
+    m2.reflective = 1.0;
+    upper.set_material(&m2);
+    w.shapes.push(upper);
+
+    let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 1.0, 0.0));
+    let _c = w.color_at(&r, 5);
+}
