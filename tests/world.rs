@@ -23,7 +23,7 @@ fn shade_ray_world_intersection() {
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(4.0, w.shapes[0].as_ref());
     let p = i.properties(&r);
-    let c = w.shade_hit(p);
+    let c = w.shade_hit(p, 5);
     assert_eq!(c, color(0.38066, 0.47583, 0.2855));
 }
 
@@ -37,7 +37,7 @@ fn shade_ray_world_intersection_inside() {
     let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(0.5, w.shapes[1].as_ref());
     let p = i.properties(&r);
-    let c = w.shade_hit(p);
+    let c = w.shade_hit(p, 5);
     assert_eq!(c, color(0.90498, 0.90498, 0.90498));
 }
 
@@ -45,7 +45,7 @@ fn shade_ray_world_intersection_inside() {
 fn shade_ray_world_miss() {
     let w = World::default();
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 1.0, 0.0));
-    let c = w.color_at(&r);
+    let c = w.color_at(&r, 5);
     assert_eq!(c, color(0.0, 0.0, 0.0));
 }
 
@@ -53,7 +53,7 @@ fn shade_ray_world_miss() {
 fn shade_ray_world_hit() {
     let w = World::default();
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
-    let c = w.color_at(&r);
+    let c = w.color_at(&r, 5);
     assert_eq!(c, color(0.38066, 0.47583, 0.2855));
 }
 
@@ -68,7 +68,7 @@ fn shade_ray_world_hit_intersection_behind_day() {
     w.shapes[1].set_material(&m1);
 
     let r = Ray::new(point(0.0, 0.0, 0.75), vector(0.0, 0.0, -1.0));
-    let c = w.color_at(&r);
+    let c = w.color_at(&r, 5);
     assert_eq!(c, w.shapes[1].material().color);
 }
 
@@ -95,7 +95,7 @@ fn shade_hit_in_shadow() {
     let r = Ray::new(point(0.0, 0.0, 5.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(4.0, w.shapes[1].as_ref());
     let p = i.properties(&r);
-    let c = w.shade_hit(p);
+    let c = w.shade_hit(p, 5);
     assert_eq!(c, color(0.1, 0.1, 0.1));
 }
 
@@ -109,7 +109,7 @@ fn reflected_color_nonreflective_material() {
     let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(1.0, w.shapes[1].as_ref());
     let p = i.properties(&r);
-    let c = w.reflected_color(p);
+    let c = w.reflected_color(p, 5);
     assert_eq!(c, color(0.0, 0.0, 0.0));
 }
 
@@ -128,6 +128,6 @@ fn reflected_color_reflective_material() {
     );
     let i = Intersection::new(SQRT_2, w.shapes[2].as_ref());
     let p = i.properties(&r);
-    let c = w.reflected_color(p);
+    let c = w.reflected_color(p, 5);
     assert_eq!(c, color(0.19032, 0.2379, 0.14274));
 }
