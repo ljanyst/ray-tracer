@@ -61,7 +61,7 @@ impl World {
         xs
     }
 
-    pub fn shade_hit(&self, props: IntersectionProperties, _depth: u8) -> Tuple {
+    pub fn shade_hit(&self, props: IntersectionProperties, depth: u8) -> Tuple {
         let mut color = Tuple::zero_color();
         for l in self.lights.iter() {
             let mut shadowed = false;
@@ -82,7 +82,10 @@ impl World {
                     shadowed,
                 );
         }
-        color
+
+        let reflected = self.reflected_color(props, depth);
+
+        color + reflected
     }
 
     pub fn reflected_color(&self, props: IntersectionProperties, depth: u8) -> Tuple {
