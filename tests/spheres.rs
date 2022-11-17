@@ -1,6 +1,7 @@
-use ray_tracer::{feq, intersect, peq, point, vector, Ray};
-use ray_tracer::{rotation_z, scaling, translation, Material, Matrix};
-use ray_tracer::{sphere, sphere_unit};
+use ray_tracer::{
+    feq, intersect, peq, point, rotation_z, scaling, sphere, sphere_glass, sphere_unit,
+    translation, vector, Material, Matrix, Ray,
+};
 
 use std::f64::consts::{FRAC_1_SQRT_2, PI};
 
@@ -128,4 +129,12 @@ fn assign_material_to_sphere() {
     m.ambient = 1.0;
     s.set_material(&m);
     assert_eq!(s.material(), &m);
+}
+
+#[test]
+fn glass_sphere() {
+    let s = sphere_glass();
+    let m = s.material();
+    assert_eq!(m.transparency, 1.0);
+    assert_eq!(m.refractive_index, 1.52);
 }
