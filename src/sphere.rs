@@ -1,6 +1,7 @@
 // Copyright 2022 Lukasz Janyst <lukasz@jany.st>
 // Licensed under the MIT license, see the LICENSE file for details.
 
+use crate::material::Material;
 use crate::matrix::Matrix;
 use crate::ray::Ray;
 use crate::shape::{LocalShape, Shape, ShapeImpl};
@@ -39,6 +40,15 @@ impl LocalShape for Sphere {
 
 pub fn sphere_unit() -> Box<dyn Shape> {
     Box::new(ShapeImpl::new(Sphere {}))
+}
+
+pub fn sphere_glass() -> Box<dyn Shape> {
+    let mut s = Box::new(ShapeImpl::new(Sphere {}));
+    let mut m = Material::new();
+    m.transparency = 1.0;
+    m.refractive_index = 1.52;
+    s.set_material(&m);
+    s
 }
 
 pub fn sphere(transform: Matrix) -> Box<dyn Shape> {
