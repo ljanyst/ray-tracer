@@ -73,7 +73,7 @@ fn setup_sphere1(world: &mut World) {
     world.shapes.push(obj);
 }
 
-fn reflection_scene() {
+pub fn demo11_reflection_scene() {
     print!("Rendering demo11 reflection scene... ");
     io::stdout().flush().unwrap();
     let now = Instant::now();
@@ -101,8 +101,4 @@ fn reflection_scene() {
     let fname = "demo11-reflection.ppm";
     canvas.save(fname).unwrap();
     println!("done. Elapsed {:.2?}. Saved {}.", elapsed, fname);
-}
-
-pub fn demo11() {
-    reflection_scene();
 }
