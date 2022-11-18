@@ -29,7 +29,7 @@ impl<'a> Intersection<'a> {
         self.shape
     }
 
-    pub fn properties(&self, ray: &Ray, _xs: &Intersections) -> IntersectionProperties {
+    pub fn properties(&self, ray: &Ray, xs: &Intersections) -> IntersectionProperties {
         let point = ray.position(self.t);
         let mut normalv = self.shape.normal_at(point);
         let eyev = -ray.direction();
@@ -40,6 +40,8 @@ impl<'a> Intersection<'a> {
             normalv = -normalv;
         }
 
+        let (n1, n2) = self.compute_refraction_indices(xs);
+
         IntersectionProperties {
             t: self.t,
             shape: self.shape,
@@ -49,7 +51,37 @@ impl<'a> Intersection<'a> {
             inside,
             over_point: point + normalv * EPSILON,
             reflectv: ray.direction().reflected(&normalv),
+            refraction_indices: (n1, n2),
         }
+    }
+
+    fn compute_refraction_indices(&self, xs: &Intersections) -> (f64, f64) {
+        let mut n1 = 1.0;
+        let mut n2 = 1.0;
+        let mut containers = Vec::<&dyn Shape>::new();
+
+        for i in 0..xs.len() {
+            let x = xs.at(i);
+            if x == self {
+                if let Some(last) = containers.last() {
+                    n1 = last.material().refractive_index;
+                }
+            }
+
+            if let Some(index) = containers.iter().position(|xx| peq(*xx, x.shape)) {
+                containers.remove(index);
+            } else {
+                containers.push(x.shape);
+            }
+
+            if x == self {
+                if let Some(last) = containers.last() {
+                    n2 = last.material().refractive_index;
+                }
+                break;
+            }
+        }
+        (n1, n2)
     }
 }
 
@@ -86,6 +118,7 @@ pub struct IntersectionProperties<'a> {
     pub inside: bool,
     pub over_point: Tuple,
     pub reflectv: Tuple,
+    pub refraction_indices: (f64, f64),
 }
 
 impl<'a> fmt::Debug for IntersectionProperties<'a> {
