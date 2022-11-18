@@ -15,6 +15,7 @@ pub trait Shape: Deref<Target = dyn LocalShape> {
     fn current_inverse_transform(&self) -> &Matrix;
     fn normal_at(&self, pt: Tuple) -> Tuple;
     fn material(&self) -> &Material;
+    fn material_mut(&mut self) -> &mut Material;
     fn set_material(&mut self, material: &Material);
 }
 
@@ -82,6 +83,11 @@ where
     fn material(&self) -> &Material {
         &self.material
     }
+
+    fn material_mut(&mut self) -> &mut Material {
+        &mut self.material
+    }
+
     fn set_material(&mut self, material: &Material) {
         self.material = material.clone();
     }
