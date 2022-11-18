@@ -1,6 +1,6 @@
 use ray_tracer::{
-    feq, intersect, peq, plane_unit, point, sphere, sphere_unit, translation, vector, Intersection,
-    Intersections, Ray, EPSILON,
+    feq, intersect, peq, plane_unit, point, scaling, sphere, sphere_glass, sphere_unit,
+    translation, vector, Intersection, Intersections, Ray, EPSILON,
 };
 
 use std::f64::consts::{FRAC_1_SQRT_2, SQRT_2};
@@ -147,4 +147,56 @@ fn compute_intersection_properties_reflection_vector() {
     let i = Intersection::new(SQRT_2, p.as_ref());
     let p = i.properties(&r, &Intersections::new());
     assert_eq!(p.reflectv, vector(0.0, FRAC_1_SQRT_2, FRAC_1_SQRT_2));
+}
+
+#[test]
+fn compute_intersection_properties_refraction_indices() {
+    let mut a = sphere_glass();
+    a.transform(scaling(2.0, 2.0, 2.0));
+    a.material_mut().refractive_index = 1.5;
+
+    let mut b = sphere_glass();
+    b.transform(translation(0.0, 0.0, -0.25));
+    b.material_mut().refractive_index = 2.0;
+
+    let mut c = sphere_glass();
+    c.transform(translation(0.0, 0.0, 0.25));
+    c.material_mut().refractive_index = 2.5;
+
+    let r = Ray::new(point(0.0, 0.0, -4.0), vector(0.0, 0.0, 1.0));
+    let mut xs = Intersections::new();
+    xs.push(Intersection::new(2.0, a.as_ref()));
+    xs.push(Intersection::new(2.75, b.as_ref()));
+    xs.push(Intersection::new(3.25, c.as_ref()));
+    xs.push(Intersection::new(4.75, b.as_ref()));
+    xs.push(Intersection::new(5.25, c.as_ref()));
+    xs.push(Intersection::new(6.0, a.as_ref()));
+
+    struct TestData {
+        pub index: usize,
+        pub n1: f64,
+        pub n2: f64,
+    }
+
+    impl TestData {
+        pub fn new(i: usize, n1: f64, n2: f64) -> TestData {
+            TestData { index: i, n1, n2 }
+        }
+    }
+
+    let td = vec![
+        TestData::new(0, 1.0, 1.5),
+        TestData::new(1, 1.5, 2.0),
+        TestData::new(2, 2.0, 2.5),
+        TestData::new(3, 2.5, 2.5),
+        TestData::new(4, 2.5, 1.5),
+        TestData::new(5, 1.5, 1.0),
+    ];
+
+    for d in td.iter() {
+        let props = xs.at(d.index).properties(&r, &xs);
+        let (n1, n2) = props.refraction_indices;
+        assert_eq!(n1, d.n1);
+        assert_eq!(n2, d.n2);
+    }
 }
