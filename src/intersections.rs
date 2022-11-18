@@ -123,11 +123,13 @@ impl<'a> Intersections<'a> {
 
     pub fn append(&mut self, mut xs: Vec<Intersection<'a>>) {
         self.xs.append(&mut xs);
-        self.xs.sort_by(|a, b| a.t().partial_cmp(&b.t()).unwrap());
     }
 
     pub fn push(&mut self, x: Intersection<'a>) {
         self.xs.push(x);
+    }
+
+    pub fn sort(&mut self) {
         self.xs.sort_by(|a, b| a.t().partial_cmp(&b.t()).unwrap());
     }
 
