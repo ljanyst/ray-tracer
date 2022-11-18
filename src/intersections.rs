@@ -50,6 +50,7 @@ impl<'a> Intersection<'a> {
             normalv,
             inside,
             over_point: point + normalv * EPSILON,
+            under_point: point - normalv * EPSILON,
             reflectv: ray.direction().reflected(&normalv),
             refraction_indices: (n1, n2),
         }
@@ -117,6 +118,7 @@ pub struct IntersectionProperties<'a> {
     pub normalv: Tuple,
     pub inside: bool,
     pub over_point: Tuple,
+    pub under_point: Tuple,
     pub reflectv: Tuple,
     pub refraction_indices: (f64, f64),
 }
