@@ -58,6 +58,7 @@ impl World {
             xs.append(s_xs);
         }
 
+        xs.sort();
         xs
     }
 
