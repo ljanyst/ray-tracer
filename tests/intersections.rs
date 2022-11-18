@@ -56,7 +56,7 @@ fn hit_intersection_all_positive() {
     let i1 = Intersection::new(1.0, s.as_ref());
     xs.push(i1);
     xs.push(Intersection::new(2.0, s.as_ref()));
-    assert_eq!(xs.hit(), Some(i1));
+    assert_eq!(xs.hit(), Some(&i1));
 }
 
 #[test]
@@ -66,7 +66,7 @@ fn hit_intersection_some_negative() {
     xs.push(Intersection::new(-1.0, s.as_ref()));
     let i2 = Intersection::new(1.0, s.as_ref());
     xs.push(i2);
-    assert_eq!(xs.hit(), Some(i2));
+    assert_eq!(xs.hit(), Some(&i2));
 }
 
 #[test]
@@ -87,7 +87,7 @@ fn hit_intersection_unsorted() {
     xs.push(Intersection::new(-3.0, s.as_ref()));
     let i4 = Intersection::new(2.0, s.as_ref());
     xs.push(i4);
-    assert_eq!(xs.hit(), Some(i4));
+    assert_eq!(xs.hit(), Some(&i4));
 }
 
 #[test]
