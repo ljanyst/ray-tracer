@@ -106,7 +106,7 @@ impl World {
         }
 
         let h = hit.unwrap();
-        let props = h.properties(ray);
+        let props = h.properties(ray, &xs);
         self.shade_hit(props, depth)
     }
 
