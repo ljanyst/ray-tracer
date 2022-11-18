@@ -139,11 +139,11 @@ impl<'a> Intersections<'a> {
         self.xs.is_empty()
     }
 
-    pub fn hit(&self) -> Option<Intersection> {
+    pub fn hit(&self) -> Option<&Intersection> {
         let mut res = None;
         for x in self.xs.iter() {
             if x.t() > 0.0 {
-                res = Some(*x);
+                res = Some(x);
                 break;
             }
         }
