@@ -138,6 +138,17 @@ fn compute_intersection_properties_overpoint() {
 }
 
 #[test]
+fn compute_intersection_properties_underpoint() {
+    let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+    let mut s = sphere_glass();
+    s.transform(translation(0.0, 0.0, 1.0));
+    let i = Intersection::new(5.0, s.as_ref());
+    let p = i.properties(&r, &Intersections::new());
+    assert!(p.under_point.z() > EPSILON / 2.0);
+    assert!(p.point.z() < p.under_point.z());
+}
+
+#[test]
 fn compute_intersection_properties_reflection_vector() {
     let r = Ray::new(
         point(0.0, 0.1, -1.0),
