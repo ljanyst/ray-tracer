@@ -29,7 +29,7 @@ impl<'a> Intersection<'a> {
         self.shape
     }
 
-    pub fn properties(&self, ray: &Ray) -> IntersectionProperties {
+    pub fn properties(&self, ray: &Ray, _xs: &Intersections) -> IntersectionProperties {
         let point = ray.position(self.t);
         let mut normalv = self.shape.normal_at(point);
         let eyev = -ray.direction();
