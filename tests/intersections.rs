@@ -95,7 +95,7 @@ fn compute_intersection_properties() {
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
     let s = sphere_unit();
     let i = Intersection::new(4.0, s.as_ref());
-    let p = i.properties(&r);
+    let p = i.properties(&r, &Intersections::new());
     assert_eq!(p.t, i.t());
     assert!(peq(p.shape, i.shape()));
     assert_eq!(p.point, point(0.0, 0.0, -1.0));
@@ -109,7 +109,7 @@ fn compute_intersection_properties_hit_inside() {
     let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
     let s = sphere_unit();
     let i = Intersection::new(1.0, s.as_ref());
-    let p = i.properties(&r);
+    let p = i.properties(&r, &Intersections::new());
     assert_eq!(p.t, i.t());
     assert!(peq(p.shape, i.shape()));
     assert_eq!(p.point, point(0.0, 0.0, 1.0));
@@ -123,7 +123,7 @@ fn compute_intersection_properties_overpoint() {
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
     let s = sphere(translation(0.0, 0.0, 1.0));
     let i = Intersection::new(5.0, s.as_ref());
-    let p = i.properties(&r);
+    let p = i.properties(&r, &Intersections::new());
     assert!(p.over_point.z() < -EPSILON / 2.0);
     assert!(p.point.z() > p.over_point.z());
 }
@@ -134,6 +134,6 @@ fn compute_intersection_properties_reflection_vector() {
     let r = Ray::new(point(0.0, 0.1, -1.0), vector(0.0, -sq22, sq22));
     let p = plane_unit();
     let i = Intersection::new(2.0_f64.sqrt(), p.as_ref());
-    let p = i.properties(&r);
+    let p = i.properties(&r, &Intersections::new());
     assert_eq!(p.reflectv, vector(0.0, sq22, sq22));
 }

@@ -1,6 +1,6 @@
 use ray_tracer::{
     color, feq, plane, point, point_light, sphere, sphere_unit, translation, vector, Intersection,
-    Material, Ray, World,
+    Intersections, Material, Ray, World,
 };
 
 use std::f64::consts::{FRAC_1_SQRT_2, SQRT_2};
@@ -22,7 +22,7 @@ fn shade_ray_world_intersection() {
     let w = World::default();
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(4.0, w.shapes[0].as_ref());
-    let p = i.properties(&r);
+    let p = i.properties(&r, &Intersections::new());
     let c = w.shade_hit(p, 5);
     assert_eq!(c, color(0.38066, 0.47583, 0.2855));
 }
@@ -36,7 +36,7 @@ fn shade_ray_world_intersection_inside() {
 
     let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(0.5, w.shapes[1].as_ref());
-    let p = i.properties(&r);
+    let p = i.properties(&r, &Intersections::new());
     let c = w.shade_hit(p, 5);
     assert_eq!(c, color(0.90498, 0.90498, 0.90498));
 }
@@ -94,7 +94,7 @@ fn shade_hit_in_shadow() {
 
     let r = Ray::new(point(0.0, 0.0, 5.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(4.0, w.shapes[1].as_ref());
-    let p = i.properties(&r);
+    let p = i.properties(&r, &Intersections::new());
     let c = w.shade_hit(p, 5);
     assert_eq!(c, color(0.1, 0.1, 0.1));
 }
@@ -108,7 +108,7 @@ fn reflected_color_nonreflective_material() {
 
     let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(1.0, w.shapes[1].as_ref());
-    let p = i.properties(&r);
+    let p = i.properties(&r, &Intersections::new());
     let c = w.reflected_color(p, 5);
     assert_eq!(c, color(0.0, 0.0, 0.0));
 }
@@ -127,7 +127,7 @@ fn reflected_color_reflective_material() {
         vector(0.0, -FRAC_1_SQRT_2, FRAC_1_SQRT_2),
     );
     let i = Intersection::new(SQRT_2, w.shapes[2].as_ref());
-    let p = i.properties(&r);
+    let p = i.properties(&r, &Intersections::new());
     let c = w.reflected_color(p, 5);
     assert_eq!(c, color(0.19032, 0.2379, 0.14274));
 }
@@ -146,7 +146,7 @@ fn shade_hit_wits_a_reflective_material() {
         vector(0.0, -FRAC_1_SQRT_2, FRAC_1_SQRT_2),
     );
     let i = Intersection::new(SQRT_2, w.shapes[2].as_ref());
-    let p = i.properties(&r);
+    let p = i.properties(&r, &Intersections::new());
     let c = w.shade_hit(p, 5);
     assert_eq!(c, color(0.87677, 0.92436, 0.82918));
 }
@@ -165,7 +165,7 @@ fn reflected_color_maximum_recursion() {
         vector(0.0, -FRAC_1_SQRT_2, FRAC_1_SQRT_2),
     );
     let i = Intersection::new(SQRT_2, w.shapes[2].as_ref());
-    let p = i.properties(&r);
+    let p = i.properties(&r, &Intersections::new());
     let c = w.reflected_color(p, 0);
     assert_eq!(c, color(0.0, 0.0, 0.0));
 }
