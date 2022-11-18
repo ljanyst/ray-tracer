@@ -17,6 +17,7 @@ fn create_intersections() {
     let s = sphere_unit();
     let mut xs = Intersections::new();
     xs.append(intersect(s.as_ref(), &r));
+    xs.sort();
     assert_eq!(xs.len(), 2);
     assert!(feq(xs.at(0).t(), 4.0));
     assert!(peq(xs.at(0).shape(), s.as_ref()));
@@ -28,7 +29,8 @@ fn create_intersections() {
 fn create_intersections_from_a_vector() {
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
     let s = sphere_unit();
-    let xs = Intersections::from_vector(intersect(s.as_ref(), &r));
+    let mut xs = Intersections::from_vector(intersect(s.as_ref(), &r));
+    xs.sort();
     assert_eq!(xs.len(), 2);
     assert!(feq(xs.at(0).t(), 4.0));
     assert!(peq(xs.at(0).shape(), s.as_ref()));
@@ -44,6 +46,7 @@ fn aggregate_intersections() {
     let mut xs = Intersections::new();
     xs.push(i1);
     xs.push(i2);
+    xs.sort();
     assert_eq!(xs.len(), 2);
     assert!(feq(xs.at(0).t(), 1.0));
     assert!(feq(xs.at(1).t(), 2.0));
@@ -56,6 +59,7 @@ fn hit_intersection_all_positive() {
     let i1 = Intersection::new(1.0, s.as_ref());
     xs.push(i1);
     xs.push(Intersection::new(2.0, s.as_ref()));
+    xs.sort();
     assert_eq!(xs.hit(), Some(&i1));
 }
 
@@ -66,6 +70,7 @@ fn hit_intersection_some_negative() {
     xs.push(Intersection::new(-1.0, s.as_ref()));
     let i2 = Intersection::new(1.0, s.as_ref());
     xs.push(i2);
+    xs.sort();
     assert_eq!(xs.hit(), Some(&i2));
 }
 
@@ -75,6 +80,7 @@ fn hit_intersection_all_negative() {
     let mut xs = Intersections::new();
     xs.push(Intersection::new(-2.0, s.as_ref()));
     xs.push(Intersection::new(-1.0, s.as_ref()));
+    xs.sort();
     assert_eq!(xs.hit(), None);
 }
 
@@ -87,6 +93,7 @@ fn hit_intersection_unsorted() {
     xs.push(Intersection::new(-3.0, s.as_ref()));
     let i4 = Intersection::new(2.0, s.as_ref());
     xs.push(i4);
+    xs.sort();
     assert_eq!(xs.hit(), Some(&i4));
 }
 
