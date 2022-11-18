@@ -1,6 +1,9 @@
-use ray_tracer::{color, point, point_light, sphere_unit, vector};
-use ray_tracer::{gradient_pattern_unit, stripe_pattern_unit};
-use ray_tracer::{Material, Tuple};
+use ray_tracer::{
+    color, gradient_pattern_unit, point, point_light, sphere_unit, stripe_pattern_unit, vector,
+    Material, Tuple,
+};
+
+use std::f64::consts::FRAC_1_SQRT_2;
 
 const BLACK: Tuple = color(0.0, 0.0, 0.0);
 const WHITE: Tuple = color(1.0, 1.0, 1.0);
@@ -37,8 +40,7 @@ fn shade_material_light_perpendicular_eye_45_to_surface() {
     let m = Material::new();
     let s = sphere_unit();
     let pos = point(0.0, 0.0, 0.0);
-    let sq22 = 2.0_f64.sqrt() / 2.0;
-    let eyev = vector(0.0, sq22, -sq22);
+    let eyev = vector(0.0, FRAC_1_SQRT_2, -FRAC_1_SQRT_2);
     let normalv = vector(0.0, 0.0, -1.0);
     let light = point_light(point(0.0, 0.0, -10.0), color(1.0, 1.0, 1.0));
     assert_eq!(

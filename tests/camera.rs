@@ -1,7 +1,8 @@
-use ray_tracer::{color, Camera, World};
-use ray_tracer::{feq, point, rotation_y, translation, vector, view_transform};
+use ray_tracer::{
+    color, feq, point, rotation_y, translation, vector, view_transform, Camera, World,
+};
 
-use std::f64::consts::PI;
+use std::f64::consts::{FRAC_1_SQRT_2, PI};
 
 #[test]
 fn compute_camera_pixel_size() {
@@ -32,9 +33,8 @@ fn construct_ray_through_center_with_transformed_camera() {
     let mut c = Camera::new(201, 101, PI / 2.0);
     c.set_transform(rotation_y(PI / 4.0) * translation(0.0, -2.0, 5.0));
     let r = c.ray_for_pixel(100, 50);
-    let sq22 = 2.0_f64.sqrt() / 2.0;
     assert_eq!(r.origin(), point(0.0, 2.0, -5.0));
-    assert_eq!(r.direction(), vector(sq22, 0.0, -sq22));
+    assert_eq!(r.direction(), vector(FRAC_1_SQRT_2, 0.0, -FRAC_1_SQRT_2));
 }
 
 #[test]

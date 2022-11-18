@@ -3,6 +3,8 @@ use ray_tracer::{
     Intersections, Ray, EPSILON,
 };
 
+use std::f64::consts::{FRAC_1_SQRT_2, SQRT_2};
+
 #[test]
 fn create_intersection() {
     let s = sphere_unit();
@@ -137,10 +139,12 @@ fn compute_intersection_properties_overpoint() {
 
 #[test]
 fn compute_intersection_properties_reflection_vector() {
-    let sq22 = 2.0_f64.sqrt() / 2.0;
-    let r = Ray::new(point(0.0, 0.1, -1.0), vector(0.0, -sq22, sq22));
+    let r = Ray::new(
+        point(0.0, 0.1, -1.0),
+        vector(0.0, -FRAC_1_SQRT_2, FRAC_1_SQRT_2),
+    );
     let p = plane_unit();
-    let i = Intersection::new(2.0_f64.sqrt(), p.as_ref());
+    let i = Intersection::new(SQRT_2, p.as_ref());
     let p = i.properties(&r, &Intersections::new());
-    assert_eq!(p.reflectv, vector(0.0, sq22, sq22));
+    assert_eq!(p.reflectv, vector(0.0, FRAC_1_SQRT_2, FRAC_1_SQRT_2));
 }

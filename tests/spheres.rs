@@ -114,9 +114,8 @@ fn compute_translated_sphere_normal() {
 fn compute_transformed_sphere_normal() {
     let s = sphere(scaling(1.0, 0.5, 1.0) * rotation_z(PI / 5.0));
 
-    let sq22 = 2.0_f64.sqrt() / 2.0;
     assert_eq!(
-        s.normal_at(point(0.0, sq22, -sq22)),
+        s.normal_at(point(0.0, FRAC_1_SQRT_2, -FRAC_1_SQRT_2)),
         vector(0.0, 0.97014, -0.24254)
     );
 }

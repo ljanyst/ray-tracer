@@ -1,5 +1,7 @@
 use ray_tracer::{color, feq, point, vector, Tuple};
 
+use std::f64::consts::FRAC_1_SQRT_2;
+
 #[test]
 fn tuple_point() {
     let a = Tuple::new(4.3, -4.2, 3.1, 1.0);
@@ -174,9 +176,8 @@ fn multiply_colors() {
 fn reflect_vector() {
     let v1 = vector(1.0, -1.0, 0.0);
     let n1 = vector(0.0, 1.0, 0.0);
-    let sq22 = 2.0_f64.sqrt() / 2.0;
     let v2 = vector(0.0, -1.0, 0.0);
-    let n2 = vector(sq22, sq22, 0.0);
+    let n2 = vector(FRAC_1_SQRT_2, FRAC_1_SQRT_2, 0.0);
     assert_eq!(v1.reflected(&n1), vector(1.0, 1.0, 0.0));
     assert_eq!(v2.reflected(&n2), vector(1.0, 0.0, 0.0));
 }
