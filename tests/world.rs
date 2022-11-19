@@ -1,6 +1,6 @@
 use ray_tracer::{
-    color, feq, plane, point, point_light, sphere, sphere_unit, translation, vector, Intersection,
-    Intersections, Material, Ray, World,
+    color, dummy_pattern, feq, plane, point, point_light, sphere, sphere_unit, translation, vector,
+    Intersection, Intersections, Material, Ray, World,
 };
 
 use std::f64::consts::{FRAC_1_SQRT_2, SQRT_2};
@@ -23,7 +23,7 @@ fn shade_ray_world_intersection() {
     let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(4.0, w.shapes[0].as_ref());
     let p = i.properties(&r, &Intersections::new());
-    let c = w.shade_hit(p, 5);
+    let c = w.shade_hit(&p, 5);
     assert_eq!(c, color(0.38066, 0.47583, 0.2855));
 }
 
@@ -37,7 +37,7 @@ fn shade_ray_world_intersection_inside() {
     let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(0.5, w.shapes[1].as_ref());
     let p = i.properties(&r, &Intersections::new());
-    let c = w.shade_hit(p, 5);
+    let c = w.shade_hit(&p, 5);
     assert_eq!(c, color(0.90498, 0.90498, 0.90498));
 }
 
@@ -95,7 +95,7 @@ fn shade_hit_in_shadow() {
     let r = Ray::new(point(0.0, 0.0, 5.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(4.0, w.shapes[1].as_ref());
     let p = i.properties(&r, &Intersections::new());
-    let c = w.shade_hit(p, 5);
+    let c = w.shade_hit(&p, 5);
     assert_eq!(c, color(0.1, 0.1, 0.1));
 }
 
@@ -171,4 +171,87 @@ fn color_at_two_paralel_mirrors() {
 
     let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 1.0, 0.0));
     let _c = w.color_at(&r, 5);
+}
+
+#[test]
+fn refracted_color_opaque_material() {
+    let w = World::default();
+    let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+    let i = Intersection::new(4.0, w.shapes[0].as_ref());
+    let p = i.properties(&r, &Intersections::new());
+    let c = w.refracted_color(&p, 5);
+    assert_eq!(c, color(0.0, 0.0, 0.0));
+}
+
+#[test]
+fn refracted_color_max_recursion() {
+    let w = World::default();
+    let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+    let i = Intersection::new(4.0, w.shapes[0].as_ref());
+    let p = i.properties(&r, &Intersections::new());
+    let c = w.refracted_color(&p, 0);
+    assert_eq!(c, color(0.0, 0.0, 0.0));
+}
+
+#[test]
+fn refracted_color_total_internal_reflection() {
+    let mut w = World::default();
+    w.shapes[0].material_mut().transparency = 1.0;
+    w.shapes[0].material_mut().refractive_index = 1.52;
+    let r = Ray::new(point(0.0, 0.0, FRAC_1_SQRT_2), vector(0.0, 1.0, 0.0));
+    let mut xs = Intersections::new();
+    xs.push(Intersection::new(-FRAC_1_SQRT_2, w.shapes[0].as_ref()));
+    xs.push(Intersection::new(FRAC_1_SQRT_2, w.shapes[0].as_ref()));
+    xs.sort();
+
+    let p = xs.at(1).properties(&r, &xs);
+    let c = w.refracted_color(&p, 5);
+    assert_eq!(c, color(0.0, 0.0, 0.0));
+}
+
+#[test]
+fn refracted_color() {
+    let mut w = World::default();
+    w.shapes[0].material_mut().ambient = 1.0;
+    w.shapes[0].material_mut().pattern = Some(dummy_pattern());
+    w.shapes[1].material_mut().transparency = 1.0;
+    w.shapes[1].material_mut().refractive_index = 1.5;
+    let r = Ray::new(point(0.0, 0.0, 0.1), vector(0.0, 1.0, 0.0));
+    let mut xs = Intersections::new();
+    xs.push(Intersection::new(-0.9899, w.shapes[0].as_ref()));
+    xs.push(Intersection::new(-0.4899, w.shapes[1].as_ref()));
+    xs.push(Intersection::new(0.4899, w.shapes[1].as_ref()));
+    xs.push(Intersection::new(0.9899, w.shapes[0].as_ref()));
+    xs.sort();
+
+    let p = xs.at(2).properties(&r, &xs);
+    let c = w.refracted_color(&p, 5);
+    assert_eq!(c, color(0.0, 0.99888, 0.04725));
+}
+
+#[test]
+fn shade_hit_with_transparent_material() {
+    let mut w = World::default();
+
+    let mut p = plane(translation(0.0, -1.0, 0.0));
+    p.material_mut().transparency = 0.5;
+    p.material_mut().refractive_index = 1.5;
+    w.shapes.push(p);
+
+    let mut s = sphere(translation(0.0, -3.5, -0.5));
+    s.material_mut().color = color(1.0, 0.0, 0.0);
+    s.material_mut().ambient = 0.5;
+    w.shapes.push(s);
+
+    let r = Ray::new(
+        point(0.0, 0.0, -3.0),
+        vector(0.0, -FRAC_1_SQRT_2, FRAC_1_SQRT_2),
+    );
+    let mut xs = Intersections::new();
+    xs.push(Intersection::new(SQRT_2, w.shapes[2].as_ref()));
+    xs.sort();
+
+    let p = xs.at(0).properties(&r, &xs);
+    let c = w.shade_hit(&p, 5);
+    assert_eq!(c, color(0.93642, 0.68642, 0.68642));
 }
