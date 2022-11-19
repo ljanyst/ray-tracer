@@ -211,3 +211,37 @@ fn compute_intersection_properties_refraction_indices() {
         assert_eq!(n2, d.n2);
     }
 }
+
+#[test]
+fn compute_schlick_apporox_total_internal_reflection() {
+    let s = sphere_glass();
+    let r = Ray::new(point(0.0, 0.0, FRAC_1_SQRT_2), vector(0.0, 1.0, 0.0));
+    let mut xs = Intersections::new();
+    xs.push(Intersection::new(-FRAC_1_SQRT_2, s.as_ref()));
+    xs.push(Intersection::new(FRAC_1_SQRT_2, s.as_ref()));
+    let p = xs.at(1).properties(&r, &xs);
+    assert_eq!(p.schlick(), 1.0);
+}
+
+#[test]
+fn compute_schlick_apporox_perpendicular() {
+    let mut s = sphere_glass();
+    s.material_mut().refractive_index = 1.5;
+    let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 1.0, 0.0));
+    let mut xs = Intersections::new();
+    xs.push(Intersection::new(-1.0, s.as_ref()));
+    xs.push(Intersection::new(1.0, s.as_ref()));
+    let p = xs.at(1).properties(&r, &xs);
+    assert!(feq(p.schlick(), 0.04));
+}
+
+#[test]
+fn compute_schlick_apporox_small_angle_n2_gt_n1() {
+    let mut s = sphere_glass();
+    s.material_mut().refractive_index = 1.5;
+    let r = Ray::new(point(0.0, 0.99, -2.0), vector(0.0, 0.0, 1.0));
+    let mut xs = Intersections::new();
+    xs.push(Intersection::new(1.8589, s.as_ref()));
+    let p = xs.at(0).properties(&r, &xs);
+    assert!(feq(p.schlick(), 0.48873));
+}
