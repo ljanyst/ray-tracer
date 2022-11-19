@@ -87,6 +87,12 @@ impl World {
         let reflected = self.reflected_color(props, depth);
         let refracted = self.refracted_color(props, depth);
 
+        let material = props.shape.material();
+        if material.reflective > 0.0 && material.transparency > 0.0 {
+            let reflectance = props.schlick();
+            return color + reflected * reflectance + refracted * (1.0 - reflectance);
+        }
+
         color + reflected + refracted
     }
 
