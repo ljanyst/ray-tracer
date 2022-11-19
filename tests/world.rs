@@ -109,7 +109,7 @@ fn reflected_color_nonreflective_material() {
     let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
     let i = Intersection::new(1.0, w.shapes[1].as_ref());
     let p = i.properties(&r, &Intersections::new());
-    let c = w.reflected_color(p, 5);
+    let c = w.reflected_color(&p, 5);
     assert_eq!(c, color(0.0, 0.0, 0.0));
 }
 
@@ -128,27 +128,8 @@ fn reflected_color_reflective_material() {
     );
     let i = Intersection::new(SQRT_2, w.shapes[2].as_ref());
     let p = i.properties(&r, &Intersections::new());
-    let c = w.reflected_color(p, 5);
+    let c = w.reflected_color(&p, 5);
     assert_eq!(c, color(0.19032, 0.2379, 0.14274));
-}
-
-#[test]
-fn shade_hit_wits_a_reflective_material() {
-    let mut w = World::default();
-    let mut p = plane(translation(0.0, -1.0, 0.0));
-    let mut m = Material::new();
-    m.reflective = 0.5;
-    p.set_material(&m);
-    w.shapes.push(p);
-
-    let r = Ray::new(
-        point(0.0, 0.0, -3.0),
-        vector(0.0, -FRAC_1_SQRT_2, FRAC_1_SQRT_2),
-    );
-    let i = Intersection::new(SQRT_2, w.shapes[2].as_ref());
-    let p = i.properties(&r, &Intersections::new());
-    let c = w.shade_hit(p, 5);
-    assert_eq!(c, color(0.87677, 0.92436, 0.82918));
 }
 
 #[test]
@@ -166,7 +147,7 @@ fn reflected_color_maximum_recursion() {
     );
     let i = Intersection::new(SQRT_2, w.shapes[2].as_ref());
     let p = i.properties(&r, &Intersections::new());
-    let c = w.reflected_color(p, 0);
+    let c = w.reflected_color(&p, 0);
     assert_eq!(c, color(0.0, 0.0, 0.0));
 }
 
