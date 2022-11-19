@@ -84,12 +84,12 @@ impl World {
                 );
         }
 
-        let reflected = self.reflected_color(props, depth);
+        let reflected = self.reflected_color(&props, depth);
 
-        color + reflected
+        color + reflected + refracted
     }
 
-    pub fn reflected_color(&self, props: IntersectionProperties, depth: u8) -> Tuple {
+    pub fn reflected_color(&self, props: &IntersectionProperties, depth: u8) -> Tuple {
         if props.shape.material().reflective == 0.0 || depth == 0 {
             return Tuple::zero_color();
         }
