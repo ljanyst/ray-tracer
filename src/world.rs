@@ -62,7 +62,7 @@ impl World {
         xs
     }
 
-    pub fn shade_hit(&self, props: IntersectionProperties, depth: u8) -> Tuple {
+    pub fn shade_hit(&self, props: &IntersectionProperties, depth: u8) -> Tuple {
         let mut color = Tuple::zero_color();
         for l in self.lights.iter() {
             let mut shadowed = false;
@@ -84,7 +84,8 @@ impl World {
                 );
         }
 
-        let reflected = self.reflected_color(&props, depth);
+        let reflected = self.reflected_color(props, depth);
+        let refracted = self.refracted_color(props, depth);
 
         color + reflected + refracted
     }
@@ -98,6 +99,32 @@ impl World {
         props.shape.material().reflective * self.color_at(&reflected_ray, depth - 1)
     }
 
+    pub fn refracted_color(&self, props: &IntersectionProperties, depth: u8) -> Tuple {
+        if props.shape.material().transparency == 0.0 || depth == 0 {
+            return Tuple::zero_color();
+        }
+
+        // Snell's law: https://en.wikipedia.org/wiki/Snell's_law
+        // Vector form: https://physics.stackexchange.com/questions/435512/snells-law-in-vector-form
+        let (n1, n2) = props.refraction_indices;
+        let cos_theta_1 = props.eyev.dot(&props.normalv);
+        let ratio = n1 / n2;
+        let sinsq_theta_2 = ratio.powi(2) * (1.0 - cos_theta_1.powi(2));
+        let cos_theta_2 = (1.0 - sinsq_theta_2).sqrt();
+
+        // Total internal reflection happens when sin(theta_2) would be larger
+        // than 1 which is impossible to satisfy
+        if sinsq_theta_2 > 1.0 {
+            return Tuple::zero_color();
+        }
+
+        // Spawn the refracted ray and compute it's color
+        let direction = (ratio * cos_theta_1 - cos_theta_2) * props.normalv - ratio * props.eyev;
+        let refracted_ray = Ray::new(props.under_point, direction);
+
+        props.shape.material().transparency * self.color_at(&refracted_ray, depth - 1)
+    }
+
     pub fn color_at(&self, ray: &Ray, depth: u8) -> Tuple {
         let xs = self.intersect(ray);
         let hit = xs.hit();
@@ -108,7 +135,7 @@ impl World {
 
         let h = hit.unwrap();
         let props = h.properties(ray, &xs);
-        self.shade_hit(props, depth)
+        self.shade_hit(&props, depth)
     }
 
     pub fn is_shadowed(&self, light: &Light, pt: Tuple) -> bool {
