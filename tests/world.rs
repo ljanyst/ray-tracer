@@ -255,3 +255,31 @@ fn shade_hit_with_transparent_material() {
     let c = w.shade_hit(&p, 5);
     assert_eq!(c, color(0.93642, 0.68642, 0.68642));
 }
+
+#[test]
+fn shade_hit_with_reflective_and_transparent_material() {
+    let mut w = World::default();
+
+    let mut p = plane(translation(0.0, -1.0, 0.0));
+    p.material_mut().transparency = 0.5;
+    p.material_mut().reflective = 0.5;
+    p.material_mut().refractive_index = 1.5;
+    w.shapes.push(p);
+
+    let mut s = sphere(translation(0.0, -3.5, -0.5));
+    s.material_mut().color = color(1.0, 0.0, 0.0);
+    s.material_mut().ambient = 0.5;
+    w.shapes.push(s);
+
+    let r = Ray::new(
+        point(0.0, 0.0, -3.0),
+        vector(0.0, -FRAC_1_SQRT_2, FRAC_1_SQRT_2),
+    );
+    let mut xs = Intersections::new();
+    xs.push(Intersection::new(SQRT_2, w.shapes[2].as_ref()));
+    xs.sort();
+
+    let p = xs.at(0).properties(&r, &xs);
+    let c = w.shade_hit(&p, 5);
+    assert_eq!(c, color(0.93391, 0.69643, 0.69243));
+}
