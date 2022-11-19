@@ -138,6 +138,32 @@ impl<'a> fmt::Debug for IntersectionProperties<'a> {
     }
 }
 
+impl<'a> IntersectionProperties<'a> {
+    /// Schlick approximation of Fresnel factor:
+    /// https://en.wikipedia.org/wiki/Schlick's_approximation
+    pub fn schlick(&self) -> f64 {
+        let cos_theta_1 = self.eyev.dot(&self.normalv);
+        let mut cos = cos_theta_1;
+        let (n1, n2) = self.refraction_indices;
+
+        if n1 > n2 {
+            let n = n1 / n2;
+            let sinsq_theta_2 = n.powi(2) * (1.0 - cos_theta_1.powi(2));
+            if sinsq_theta_2 > 1.0 {
+                return 1.0;
+            }
+
+            let cos_theta_2 = (1.0 - sinsq_theta_2).sqrt();
+
+            // when n1 > n2 use cos_theta_2 instead of cos_theta_1
+            cos = cos_theta_2;
+        }
+
+        let r0 = ((n1 - n2) / (n1 + n2)).powi(2);
+        r0 + (1.0 - r0) * (1.0 - cos).powi(5)
+    }
+}
+
 #[derive(Default)]
 pub struct Intersections<'a> {
     xs: Vec<Intersection<'a>>,
