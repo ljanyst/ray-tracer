@@ -82,7 +82,7 @@ Description:
 
 [code](src/demo/demo10.rs)
 
-Chapter 11 Demo - Reflections and Refratcions
+Chapter 11 Demo - Reflections and Refractions
 ---------------------------------------------
 
 Description:
@@ -90,6 +90,11 @@ Description:
  * build a world with reflective walls and a ball inside
 
 ![Demo 11 reflection_rendering](demo-imgs/demo11-reflection.webp)
+
+ * build a world with a bunch of spheres including one transparent and slightly
+   reflective
+
+![Demo 11 refraction_rendering](demo-imgs/demo11-refraction.webp)
 
 [code](src/demo/demo11.rs)
 
