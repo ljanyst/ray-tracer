@@ -2,7 +2,7 @@
 // Licensed under the MIT license, see the LICENSE file for details.
 
 use crate::demo::demo10::demo10;
-use crate::demo::demo11::demo11_reflection_scene;
+use crate::demo::demo11::*;
 use crate::demo::demo5::demo5;
 use crate::demo::demo6::demo6;
 use crate::demo::demo7and8::demo7and8;
@@ -30,6 +30,7 @@ pub fn main() {
         ("demo9", demo9),
         ("demo10", demo10),
         ("demo11-reflection-scene", demo11_reflection_scene),
+        ("demo11-refraction-scene", demo11_refraction_scene),
         ("noise", noise),
     ];
 
