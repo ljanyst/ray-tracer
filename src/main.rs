@@ -48,6 +48,7 @@ pub fn main() {
         for demo in demos.iter() {
             demo.1();
         }
+        return;
     }
 
     let mut demos_map = HashMap::<&str, fn()>::new();
