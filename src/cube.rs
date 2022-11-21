@@ -27,6 +27,10 @@ impl LocalShape for Cube {
         let tmin = xtmin.max(ytmin).max(ztmin);
         let tmax = xtmax.min(ytmax).min(ztmax);
 
+        if tmin > tmax {
+            return Vec::<f64>::new();
+        }
+
         vec![tmin, tmax]
     }
 
