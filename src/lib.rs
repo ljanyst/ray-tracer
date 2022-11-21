@@ -4,6 +4,7 @@
 pub use crate::camera::*;
 pub use crate::canvas::*;
 pub use crate::constants::*;
+pub use crate::cube::*;
 pub use crate::intersections::*;
 pub use crate::light::*;
 pub use crate::material::*;
@@ -31,6 +32,7 @@ pub use crate::world::*;
 pub mod camera;
 pub mod canvas;
 pub mod constants;
+pub mod cube;
 pub mod intersections;
 pub mod light;
 pub mod material;
