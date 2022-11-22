@@ -4,7 +4,7 @@
 use crate::matrix::Matrix;
 use crate::ray::Ray;
 use crate::shape::{LocalShape, Shape, ShapeImpl};
-use crate::tuple::Tuple;
+use crate::tuple::{vector, Tuple};
 
 pub struct Cube {}
 
@@ -34,8 +34,14 @@ impl LocalShape for Cube {
         vec![tmin, tmax]
     }
 
-    fn local_normal_at(&self, _pt: Tuple) -> Tuple {
-        Tuple::zero_vector()
+    fn local_normal_at(&self, pt: Tuple) -> Tuple {
+        let max = pt.x().abs().max(pt.y().abs()).max(pt.z().abs());
+        if max == pt.x().abs() {
+            return vector(pt.x(), 0.0, 0.0);
+        } else if max == pt.y().abs() {
+            return vector(0.0, pt.y(), 0.0);
+        }
+        vector(0.0, 0.0, pt.z())
     }
 }
 
