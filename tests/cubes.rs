@@ -60,3 +60,34 @@ fn intersect_ray_and_cube() {
         }
     }
 }
+
+#[test]
+fn compute_unit_cube_normal() {
+    struct TestData {
+        pub point: Tuple,
+        pub normal: Tuple,
+    }
+
+    impl TestData {
+        pub fn new(point: Tuple, normal: Tuple) -> TestData {
+            TestData { point, normal }
+        }
+    }
+
+    let td = vec![
+        TestData::new(point(1.0, 0.5, -0.8), vector(1.0, 0.0, 0.0)),
+        TestData::new(point(-1.0, -0.2, 0.9), vector(-1.0, 0.0, 0.0)),
+        TestData::new(point(-0.4, 1.0, -0.1), vector(0.0, 1.0, 0.0)),
+        TestData::new(point(0.3, -1.0, -0.7), vector(0.0, -1.0, 0.0)),
+        TestData::new(point(-0.6, 0.3, 1.0), vector(0.0, 0.0, 1.0)),
+        TestData::new(point(0.4, 0.4, -1.0), vector(0.0, 0.0, -1.0)),
+        TestData::new(point(1.0, 1.0, 1.0), vector(1.0, 0.0, 0.0)),
+        TestData::new(point(-1.0, -1.0, -1.0), vector(-1.0, 0.0, 0.0)),
+    ];
+
+    let c = cube_unit();
+    for t in td.iter() {
+        let normal = c.normal_at(t.point);
+        assert_eq!(normal, t.normal);
+    }
+}
