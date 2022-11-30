@@ -3,6 +3,7 @@
 
 use crate::demo::demo10::demo10;
 use crate::demo::demo11::*;
+use crate::demo::demo12::demo12;
 use crate::demo::demo5::demo5;
 use crate::demo::demo6::demo6;
 use crate::demo::demo7and8::demo7and8;
@@ -12,6 +13,7 @@ use crate::demo::noise::noise;
 mod demo {
     pub mod demo10;
     pub mod demo11;
+    pub mod demo12;
     pub mod demo5;
     pub mod demo6;
     pub mod demo7and8;
@@ -31,6 +33,7 @@ pub fn main() {
         ("demo10", demo10),
         ("demo11-reflection-scene", demo11_reflection_scene),
         ("demo11-refraction-scene", demo11_refraction_scene),
+        ("demo12", demo12),
         ("noise", noise),
     ];
 
