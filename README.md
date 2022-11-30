@@ -98,6 +98,17 @@ Description:
 
 [code](src/demo/demo11.rs)
 
+Chapter 12 Demo - Cubes
+-----------------------
+
+Description:
+
+ * build a world out of cubes
+
+![Demo 12 rendering](demo-imgs/demo12.webp)
+
+[code](src/demo/demo12.rs)
+
 [rtc]: http://raytracerchallenge.com/
 [rust]: https://www.rust-lang.org/
 
