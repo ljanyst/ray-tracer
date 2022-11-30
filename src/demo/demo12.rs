@@ -182,7 +182,7 @@ pub fn demo12() {
     setup_paintings(&mut world);
     setup_cubes(&mut world);
 
-    let l = point_light(point(-1.0, 4.5, -4.5), color(0.8, 0.8, 0.8));
+    let l = point_light(point(-1.0, 4.5, -4.5), color(1.0, 1.0, 1.0));
     world.lights.push(l);
 
     let mut camera = Camera::new(1280, 620, PI / 3.0);
