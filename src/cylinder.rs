@@ -46,7 +46,6 @@ impl LocalShape for Cylinder {
         let disc_sqrt = disc.sqrt();
         let t0 = (-b - disc_sqrt) / (2.0 * a);
         let t1 = (-b + disc_sqrt) / (2.0 * a);
-        eprintln!("{} {}", t0, t1);
 
         vec![t0, t1]
     }
