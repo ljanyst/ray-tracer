@@ -51,8 +51,8 @@ impl LocalShape for Cylinder {
         vec![t0, t1]
     }
 
-    fn local_normal_at(&self, _pt: Tuple) -> Tuple {
-        vector(0.0, 0.0, 0.0)
+    fn local_normal_at(&self, pt: Tuple) -> Tuple {
+        vector(pt.x(), 0.0, pt.z())
     }
 }
 
