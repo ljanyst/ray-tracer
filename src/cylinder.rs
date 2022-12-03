@@ -7,7 +7,10 @@ use crate::ray::Ray;
 use crate::shape::{LocalShape, Shape, ShapeImpl};
 use crate::tuple::{vector, Tuple};
 
-pub struct Cylinder {}
+pub struct Cylinder {
+    minimum: f64,
+    maximum: f64,
+}
 
 impl LocalShape for Cylinder {
     fn local_intersect(&self, ray: &Ray) -> Vec<f64> {
@@ -44,10 +47,26 @@ impl LocalShape for Cylinder {
         }
 
         let disc_sqrt = disc.sqrt();
-        let t0 = (-b - disc_sqrt) / (2.0 * a);
-        let t1 = (-b + disc_sqrt) / (2.0 * a);
+        let mut t0 = (-b - disc_sqrt) / (2.0 * a);
+        let mut t1 = (-b + disc_sqrt) / (2.0 * a);
 
-        vec![t0, t1]
+        if t0 > t1 {
+            std::mem::swap(&mut t0, &mut t1);
+        }
+
+        let mut xs = Vec::new();
+
+        let y0 = ray.origin().y() + t0 * ray.direction().y();
+        if self.minimum < y0 && y0 < self.maximum {
+            xs.push(t0);
+        }
+
+        let y1 = ray.origin().y() + t0 * ray.direction().y();
+        if self.minimum < y1 && y1 < self.maximum {
+            xs.push(t1);
+        }
+
+        xs
     }
 
     fn local_normal_at(&self, pt: Tuple) -> Tuple {
@@ -56,7 +75,14 @@ impl LocalShape for Cylinder {
 }
 
 pub fn cylinder_unit() -> Box<dyn Shape> {
-    Box::new(ShapeImpl::new(Cylinder {}))
+    Box::new(ShapeImpl::new(Cylinder {
+        minimum: f64::NEG_INFINITY,
+        maximum: f64::INFINITY,
+    }))
+}
+
+pub fn cylinder_min_max(minimum: f64, maximum: f64) -> Box<dyn Shape> {
+    Box::new(ShapeImpl::new(Cylinder { minimum, maximum }))
 }
 
 pub fn cylinder(transform: Matrix) -> Box<dyn Shape> {
