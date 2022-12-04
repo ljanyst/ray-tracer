@@ -10,6 +10,31 @@ use crate::tuple::{vector, Tuple};
 pub struct Cylinder {
     minimum: f64,
     maximum: f64,
+    closed: bool,
+}
+
+impl Cylinder {
+    fn intersect_caps(&self, ray: &Ray) -> Vec<f64> {
+        if !self.closed || ray.direction().y().abs() < EPSILON {
+            return vec![];
+        }
+
+        let mut xs = Vec::new();
+        let mut check_cap = |limit: f64| {
+            let t = (limit - ray.origin().y()) / ray.direction().y();
+            let x = ray.origin().x() + t * ray.direction().x();
+            let z = ray.origin().z() + t * ray.direction().z();
+            if x.powi(2) + z.powi(2) <= 1.0 {
+                xs.push(t);
+            }
+        };
+
+        check_cap(self.minimum);
+        check_cap(self.maximum);
+        xs.sort_by(|a, b| a.partial_cmp(b).unwrap());
+
+        xs
+    }
 }
 
 impl LocalShape for Cylinder {
@@ -34,7 +59,7 @@ impl LocalShape for Cylinder {
 
         // Ray is parallel to the Y axis
         if a < EPSILON {
-            return vec![];
+            return self.intersect_caps(ray);
         }
 
         let b = 2.0 * ray.origin().x() * ray.direction().x()
@@ -61,10 +86,13 @@ impl LocalShape for Cylinder {
             xs.push(t0);
         }
 
-        let y1 = ray.origin().y() + t0 * ray.direction().y();
+        let y1 = ray.origin().y() + t1 * ray.direction().y();
         if self.minimum < y1 && y1 < self.maximum {
             xs.push(t1);
         }
+
+        xs.append(&mut self.intersect_caps(ray));
+        xs.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
         xs
     }
@@ -78,11 +106,16 @@ pub fn cylinder_unit() -> Box<dyn Shape> {
     Box::new(ShapeImpl::new(Cylinder {
         minimum: f64::NEG_INFINITY,
         maximum: f64::INFINITY,
+        closed: false,
     }))
 }
 
-pub fn cylinder_min_max(minimum: f64, maximum: f64) -> Box<dyn Shape> {
-    Box::new(ShapeImpl::new(Cylinder { minimum, maximum }))
+pub fn cylinder_min_max(minimum: f64, maximum: f64, closed: bool) -> Box<dyn Shape> {
+    Box::new(ShapeImpl::new(Cylinder {
+        minimum,
+        maximum,
+        closed,
+    }))
 }
 
 pub fn cylinder(transform: Matrix) -> Box<dyn Shape> {
