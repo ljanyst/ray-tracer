@@ -74,7 +74,38 @@ fn intersect_ray_and_cylinder() {
         TestData::new_h(point(0.0, 1.5, -2.0), vector(0.0, 0.0, 1.0), 1.0, 3.0),
     ];
 
-    let c = cylinder_min_max(1.0, 2.0);
+    let c = cylinder_min_max(1.0, 2.0, false);
+    run_tests(td, c.as_ref());
+
+    let td = vec![
+        TestData::new_h(point(0.0, 3.0, 0.0), vector(0.0, -1.0, 0.0), 1.0, 2.0),
+        TestData::new_h(
+            point(0.0, 3.0, -2.0),
+            vector(0.0, -1.0, 2.0),
+            2.23607,
+            3.35410,
+        ),
+        TestData::new_h(
+            point(0.0, 3.0, -2.0),
+            vector(0.0, -1.0, 1.0),
+            std::f64::consts::SQRT_2,
+            2.82843,
+        ),
+        TestData::new_h(
+            point(0.0, 0.0, -2.0),
+            vector(0.0, 1.0, 2.0),
+            2.23607,
+            3.35410,
+        ),
+        TestData::new_h(
+            point(0.0, -1.0, -2.0),
+            vector(0.0, 1.0, 1.0),
+            2.82843,
+            4.24264,
+        ),
+    ];
+
+    let c = cylinder_min_max(1.0, 2.0, true);
     run_tests(td, c.as_ref());
 }
 
