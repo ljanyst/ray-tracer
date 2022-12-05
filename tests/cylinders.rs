@@ -134,4 +134,19 @@ fn compute_unit_cylinder_normal() {
         let normal = c.normal_at(t.point);
         assert_eq!(normal, t.normal);
     }
+
+    let td = vec![
+        TestData::new(point(0.0, 1.0, 0.0), vector(0.0, -1.0, 0.0)),
+        TestData::new(point(0.5, 1.0, 0.0), vector(0.0, -1.0, 0.0)),
+        TestData::new(point(0.0, 1.0, 0.5), vector(0.0, -1.0, 0.0)),
+        TestData::new(point(0.0, 2.0, 0.0), vector(0.0, 1.0, 0.0)),
+        TestData::new(point(0.5, 2.0, 0.0), vector(0.0, 1.0, 0.0)),
+        TestData::new(point(0.0, 2.0, 0.5), vector(0.0, 1.0, 0.0)),
+    ];
+
+    let c = cylinder_min_max(1.0, 2.0, true);
+    for t in td.iter() {
+        let normal = c.normal_at(t.point);
+        assert_eq!(normal, t.normal);
+    }
 }
