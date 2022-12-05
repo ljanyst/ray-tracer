@@ -98,6 +98,15 @@ impl LocalShape for Cylinder {
     }
 
     fn local_normal_at(&self, pt: Tuple) -> Tuple {
+        let dist = pt.x().powi(2) + pt.z().powi(2);
+        if dist < 1.0 {
+            if pt.y() > self.maximum - EPSILON {
+                return vector(0.0, 1.0, 0.0);
+            }
+            if pt.y() < self.minimum + EPSILON {
+                return vector(0.0, -1.0, 0.0);
+            }
+        }
         vector(pt.x(), 0.0, pt.z())
     }
 }
