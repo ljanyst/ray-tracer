@@ -3,6 +3,7 @@
 
 pub use crate::camera::*;
 pub use crate::canvas::*;
+pub use crate::cone::*;
 pub use crate::constants::*;
 pub use crate::cube::*;
 pub use crate::cylinder::*;
@@ -32,6 +33,7 @@ pub use crate::world::*;
 
 pub mod camera;
 pub mod canvas;
+pub mod cone;
 pub mod constants;
 pub mod cube;
 pub mod cylinder;
