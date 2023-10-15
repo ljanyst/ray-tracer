@@ -78,6 +78,9 @@ impl Tuple {
 
     pub fn normalized(&self) -> Tuple {
         let norm = self.norm();
+        if norm == 0.0 {
+            return *self;
+        }
         let mut n = *self;
         for i in 0..4 {
             n.data[i] /= norm
